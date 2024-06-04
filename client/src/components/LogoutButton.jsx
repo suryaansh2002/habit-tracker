@@ -20,7 +20,11 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button type="primary" className="absolute top-4 right-4 text-lg p-4" onClick={handleLogout}>
+    <Button
+      type="primary"
+      className="absolute top-4 right-4 text-lg p-4"
+      onClick={handleLogout}
+    >
       Logout
     </Button>
   );

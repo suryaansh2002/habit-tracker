@@ -40,7 +40,7 @@ export default function Home() {
     <div className="flex text-center justify-center items-center h-[100vh] w-[100vw]">
       <Button
         type="primary"
-        className="py-6 px-8 text-lg"
+        className="py-6 px-8 text-lg "
         onClick={signInWithGoogle}
       >
         Sign in with Google

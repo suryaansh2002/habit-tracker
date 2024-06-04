@@ -1,9 +1,9 @@
 // client/hoc/withAuth.js
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { auth } from '../firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { auth } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 const withAuth = (WrappedComponent) => {
   return (props) => {
@@ -11,7 +11,7 @@ const withAuth = (WrappedComponent) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-      const storedUser = localStorage.getItem('user');
+      const storedUser = localStorage.getItem("user");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       } else {
@@ -19,7 +19,7 @@ const withAuth = (WrappedComponent) => {
           if (user) {
             setUser(user);
           } else {
-            router.push('/');
+            router.push("/");
           }
         });
       }

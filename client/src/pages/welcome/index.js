@@ -21,6 +21,7 @@ function Welcome({ user }) {
     }
     router.push("/add-habit");
   };
+  
   return (
     <div>
       <LogoutButton />

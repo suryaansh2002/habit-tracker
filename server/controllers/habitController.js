@@ -1,4 +1,4 @@
-const Habit = require('../models/habit');
+const Habit = require("../models/habit");
 
 exports.createHabit = async (req, res) => {
   try {
@@ -6,8 +6,8 @@ exports.createHabit = async (req, res) => {
     await habit.save();
     res.status(201).json(habit);
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Server Error' });
+    console.log(error);
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -18,7 +18,7 @@ exports.getHabitsByUser = async (req, res) => {
     const habits = await Habit.find({ userId });
     res.status(200).json(habits);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -28,11 +28,11 @@ exports.getHabitById = async (req, res) => {
   try {
     const habit = await Habit.findById(id);
     if (!habit) {
-      return res.status(404).json({ message: 'Habit not found' });
+      return res.status(404).json({ message: "Habit not found" });
     }
     res.status(200).json(habit);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -43,10 +43,20 @@ exports.updateHabitById = async (req, res) => {
   try {
     const habit = await Habit.findByIdAndUpdate(id, updateData, { new: true });
     if (!habit) {
-      return res.status(404).json({ message: 'Habit not found' });
+      return res.status(404).json({ message: "Habit not found" });
     }
     res.status(200).json(habit);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+exports.getFilteredHabits = async (req, res) => {
+  console.log(req.query)
+  const { startDate, endDate, userId } = req.query;
+  try {
+    res.status(200).json([]);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
   }
 };

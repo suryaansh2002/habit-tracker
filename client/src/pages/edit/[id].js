@@ -14,6 +14,8 @@ import LogoutButton from "@/components/LogoutButton";
 import moment from "moment";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useRouter } from 'next/router';
+import dayjs from "dayjs";
+import BottomNav from "@/components/BottomNav";
 
 const AddHabit = ({ user }) => {
   const [name, setName] = useState("");
@@ -83,13 +85,13 @@ const AddHabit = ({ user }) => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="">
       <LogoutButton />
       <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100vw]">
         <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
           Update Habit
         </div>
-        {name && startDate && endDate && <Form className="text-left ml-[10vw]  w-[90vw]">
+        {name && startDate && <Form className="text-left ml-[15vw]  w-[90vw]">
           <Form.Item>
             <div>Title:</div>
             <Input
@@ -106,10 +108,12 @@ const AddHabit = ({ user }) => {
             <DatePicker
               format={"DD-MM-YYYY"}
               onChange={(val) => {
-                setStartDate(moment(val.$d).format("YYYY-MM-DD"));
+                setStartDate(dayjs(val.$d).format("YYYY-MM-DD"));
               }}
-              defaultValue={moment(startDate)}
+              defaultValue={dayjs(startDate)}
               className="p-2 w-[80%] my-2 mb-6"
+              minDate={dayjs()}
+              allowClear={false}
             />
           </div>
           <div>
@@ -117,12 +121,15 @@ const AddHabit = ({ user }) => {
             <DatePicker
               format={"DD-MM-YYYY"}
               onChange={(val) => {
-                console.log(val)
-                console.log(moment(val.$d).format("YYYY-MM-DD"))
-                setEndDate(moment(val.$d).format("YYYY-MM-DD"));
+                val ? 
+                setEndDate(dayjs(val.$d).format("YYYY-MM-DD"))
+                : setEndDate("")
+                ;
               }}
-              defaultValue={moment(endDate)}
               className="p-2 w-[80%] my-2 mb-6"
+              minDate={dayjs(startDate)}
+              allowClear={true}
+              value={endDate ? dayjs(endDate) : ""}
             />
           </div>
           <div>
@@ -147,6 +154,7 @@ const AddHabit = ({ user }) => {
           </Form.Item>
         </Form>}
       </div>
+      <BottomNav/>
     </div>
   );
 };

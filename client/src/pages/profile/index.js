@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { List, Typography } from 'antd';
-import withAuth from '@/hoc/withAuth';
-import LogoutButton from '@/components/LogoutButton';
-import moment from 'moment';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { List, Typography } from "antd";
+import withAuth from "@/hoc/withAuth";
+import LogoutButton from "@/components/LogoutButton";
+import moment from "moment";
+import BottomNav from "@/components/BottomNav";
 
 const Profile = ({ user }) => {
   const [habits, setHabits] = useState([]);
@@ -11,10 +12,12 @@ const Profile = ({ user }) => {
   useEffect(() => {
     const fetchHabits = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/habit/${user.uid}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/habit/${user.uid}`
+        );
         setHabits(response.data);
       } catch (error) {
-        console.error('Error fetching habits:', error);
+        console.error("Error fetching habits:", error);
       }
     };
 
@@ -22,34 +25,27 @@ const Profile = ({ user }) => {
   }, [user.uid]);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="">
       <LogoutButton />
       <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100vw]">
-
-      <div className='text-2xl font-bold mb-8'> {user.displayName}</div>
-      {
-        habits.map((habit)=>
-        <div className='rounded-lg p-6 shadow-lg w-[90vw] flex flex-row justify-between my-2'>
-            <div className='text-left'>
-                <div className='text-lg '>
-                    {habit.name}
-                    </div>
-                    <div className='text-xs'>
-                        {moment(habit.startDate).format('DD MMM YY')}- {moment(habit.endDate).format('DD MMM YY')}
-                        </div>
+        <div className="text-2xl font-bold mb-8"> {user.displayName}</div>
+        {habits.map((habit) => (
+          <div className="rounded-lg p-6 shadow-lg w-[90vw] flex flex-row justify-between my-2">
+            <div className="text-left">
+              <div className="text-lg ">{habit.name}</div>
+              <div className="text-xs">
+                {moment(habit.startDate).format("DD MMM YY")}-{" "}
+                {moment(habit.endDate).format("DD MMM YY")}
+              </div>
             </div>
             <div>
-                <a href={`/edit/${habit._id}`}>
-
-                Edit
-                </a>
+              <a href={`/edit/${habit._id}`}>Edit</a>
             </div>
-        </div>
-        )
-      }
+          </div>
+        ))}
+      </div>
+      <BottomNav />
     </div>
-    </div>
-
   );
 };
 

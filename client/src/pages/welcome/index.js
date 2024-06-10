@@ -27,6 +27,7 @@ function Welcome({ user }) {
   const fetchHabits = async () => {
     try {
       const response = await axios.get(
+        url +
         `api/habit/${user.uid}`
       );
       if(response.data.length>0){

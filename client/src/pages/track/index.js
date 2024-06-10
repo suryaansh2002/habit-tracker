@@ -16,6 +16,7 @@ const Home = ({ user }) => {
   const fetchHabits = async () => {
     try {
       const response = await axios.get(
+        url + 
         `api/habit/${user.uid}`
       );
       setHabits(response.data);

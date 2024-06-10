@@ -6,7 +6,7 @@ import withAuth from "@/hoc/withAuth";
 import LogoutButton from "@/components/LogoutButton";
 import { Button, Card } from "antd";
 import axios from "axios";
-function Welcome({ user }) {
+function Create({ user }) {
   const habitOptions = [
     "Exercise",
     "Drink 3 lts water",
@@ -22,22 +22,7 @@ function Welcome({ user }) {
     router.push("/add-habit");
   };
 
-  const fetchHabits = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/habit/${user.uid}`
-      );
-      if(response.data.length>0){
-        router.push('/dashboard')
-      }
-    } catch (error) {
-      console.error("Error fetching habits:", error);
-    }
-  };
 
-  useEffect(()=>{
-    fetchHabits()
-  },[])
   return (
     <div>
       <LogoutButton />
@@ -45,8 +30,8 @@ function Welcome({ user }) {
         <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
           Welcome {user.displayName.split(" ")[0]}
         </div>
-        <div className="text-xl font-semibold text-left ml-8  text-gray-900 border-gray mb-4">
-          Let's get you started with building habits that matter.
+        <div className="text-xl font-semibold text-left text-gray-900 border-gray mb-4">
+          Create Your next habit now!
           <br />
           <br />
           Pick from Popular Habits-
@@ -73,4 +58,4 @@ function Welcome({ user }) {
   );
 }
 
-export default withAuth(Welcome);
+export default withAuth(Create);

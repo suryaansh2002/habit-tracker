@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { List, Typography } from "antd";
+import { List, Typography, Button } from "antd";
 import withAuth from "@/hoc/withAuth";
 import LogoutButton from "@/components/LogoutButton";
 import moment from "moment";
 import BottomNav from "@/components/BottomNav";
+import { useRouter } from "next/router";
 
 const Profile = ({ user }) => {
   const [habits, setHabits] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -43,6 +45,13 @@ const Profile = ({ user }) => {
             </div>
           </div>
         ))}
+          <Button
+          onClick={() => router.push('create')}
+          className="w-[90%] bg-gray-700 text-white  p-4 text-lg py-6"
+        >
+          Create New Habit
+        </Button>
+
       </div>
       <BottomNav />
     </div>

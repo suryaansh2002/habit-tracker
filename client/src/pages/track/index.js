@@ -73,6 +73,7 @@ const Home = ({ user }) => {
               ? setDate(dayjs(val.$d).format("YYYY-MM-DD"))
               : setDate(dayjs().format("YYYY-MM-DD"));
           }}
+          maxDate={dayjs()}
           allowClear={false}
         />
 

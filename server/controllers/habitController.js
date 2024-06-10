@@ -1,5 +1,5 @@
 const Habit = require("../models/habit");
-
+const moment = require("moment");
 exports.createHabit = async (req, res) => {
   try {
     const habit = new Habit(req.body);
@@ -51,11 +51,124 @@ exports.updateHabitById = async (req, res) => {
   }
 };
 
+function calculateDaysDifference(date1, date2) {
+  var momentDate1 = moment(date1, "YYYY-MM-DD");
+  var momentDate2 = moment(date2, "YYYY-MM-DD");
+
+  var differenceInDays = momentDate2.diff(momentDate1, "days");
+  return differenceInDays;
+}
+
+function countDoneDaysInRange(startDate, endDate, doneDays) {
+  var momentStartDate = moment(startDate, "YYYY-MM-DD");
+  var momentEndDate = moment(endDate, "YYYY-MM-DD");
+
+  // Filter the doneDays array to include only dates within the range
+  var count = doneDays.filter(function (day) {
+    var momentDay = moment(day, "YYYY-MM-DD");
+    return (
+      momentDay.isSameOrAfter(momentStartDate) &&
+      momentDay.isSameOrBefore(momentEndDate)
+    );
+  }).length;
+
+  return count;
+}
+
 exports.getFilteredHabits = async (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   const { startDate, endDate, userId } = req.query;
+  let habits = await Habit.find({ userId });
+  habits= habits.map((habit)=>
+  {
+    if(habit.endDate.length){
+      return {...habit['_doc']};
+    }
+    else{
+      return {
+        ...habit['_doc'],
+        endDate:"9999-12-31",
+      }
+    }
+  }
+  )
+  // console.log(habits)
+  let filteredHabits1 = habits.filter(
+    (habit) =>
+      moment(habit.startDate).isSameOrBefore(moment(startDate)) &&
+      moment(habit.endDate).isSameOrAfter(moment(endDate))
+  );
+  filteredHabits1 = filteredHabits1.map((habit) => {
+    return {
+      ...habit,
+      totalDays: calculateDaysDifference(startDate, endDate) + 1,
+    };
+  });
+
+  let filteredHabits2 = habits.filter(
+    (habit) =>
+      moment(habit.startDate).isSameOrBefore(moment(startDate)) &&
+      moment(habit.endDate).isAfter(moment(startDate)) &&
+      moment(habit.endDate).isSameOrBefore(moment(endDate))
+  );
+
+  filteredHabits2 = filteredHabits2.map((habit) => {
+    return {
+      ...habit,
+      totalDays: calculateDaysDifference(startDate, habit.endDate) + 1,
+    };
+  });
+
+  let filteredHabits3 = habits.filter(
+    (habit) =>
+      moment(habit.startDate).isSameOrAfter(moment(startDate)) &&
+      moment(habit.startDate).isBefore(moment(endDate)) &&
+      moment(habit.endDate).isSameOrAfter(moment(endDate))
+  );
+
+  filteredHabits3 = filteredHabits3.map((habit) => {
+    return {
+      ...habit,
+      totalDays: calculateDaysDifference(habit.startDate, endDate) + 1,
+    };
+  });
+
+  let filteredHabits4 = habits.filter(
+    (habit) =>
+      moment(habit.startDate).isSameOrAfter(moment(startDate)) &&
+      moment(habit.startDate).isSameOrBefore(moment(endDate)) &&
+      moment(habit.endDate).isSameOrAfter(moment(startDate)) &&
+      moment(habit.endDate).isSameOrBefore(moment(endDate))
+  );
+
+  filteredHabits4 = filteredHabits4.map((habit) => {
+    return {
+      ...habit,
+      totalDays: calculateDaysDifference(habit.startDate, habit.endDate) + 1,
+    };
+  });
+
+
+  let totalFilteredHabits = [
+    ...filteredHabits1,
+    ...filteredHabits2,
+    ...filteredHabits3,
+    ...filteredHabits4,
+  ];
+  console.log(filteredHabits3)
+  totalFilteredHabits = totalFilteredHabits.map((habit) => {
+    return {
+      ...habit,
+      totalDaysToDo: Math.ceil((habit.numDays / 7) * habit.totalDays),
+      countOfDaysDone: countDoneDaysInRange(
+        habit.startDate,
+        habit.endDate,
+        habit.daysDone
+      ),
+    };
+  });
   try {
-    res.status(200).json([]);
+    res.status(200).json(totalFilteredHabits);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }

@@ -1,13 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth, provider } from "../firebaseConfig";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 
 export default function Home() {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(true)
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(async (result) => {
@@ -29,7 +29,9 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setLoading(true)
     onAuthStateChanged(auth, (user) => {
+      setLoading(false)
       if (user) {
         router.push("/dashboard");
       }
@@ -39,11 +41,12 @@ export default function Home() {
   return (
     <div className="flex text-center justify-center items-center h-[100vh] w-[100vw]">
       <Button
-        type="primary"
+        type=""
         className="py-6 px-8 text-lg "
         onClick={signInWithGoogle}
+        disabled={loading}
       >
-        Sign in with Google
+      {  loading ? <Spin size="large"/> : 'Sign in with Google'}
       </Button>
     </div>
   );

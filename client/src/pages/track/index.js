@@ -10,12 +10,13 @@ const Home = ({ user }) => {
   const [habits, setHabits] = useState([]);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [openHabits, setOpenHabits] = useState([]);
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
 
   const fetchHabits = async () => {
-    console.log("Here");
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/habit/${user.uid}`
+        `api/habit/${user.uid}`
       );
       setHabits(response.data);
       const openHabits = response.data.filter((habit) => {
@@ -57,7 +58,7 @@ const Home = ({ user }) => {
     } else {
       tempDaysDone = tempDaysDone.filter((d) => d != date);
     }
-    const response = await axios.put(`http://localhost:5000/api/habit/${id}`, {
+    const response = await axios.put(url + `api/habit/${id}`, {
       daysDone: tempDaysDone,
     });
     console.log(response.data);

@@ -8,6 +8,8 @@ import { Button, Spin } from "antd";
 export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState(true)
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(async (result) => {
@@ -15,7 +17,7 @@ export default function Home() {
         localStorage.setItem("user", JSON.stringify(user));
 
         const { uid, displayName, email } = user;
-        await axios.post("http://localhost:5000/api/user", {
+        await axios.post(url + "api/user", {
           uid,
           name: displayName,
           email,

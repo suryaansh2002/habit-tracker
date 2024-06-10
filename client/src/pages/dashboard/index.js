@@ -48,12 +48,15 @@ function Dashboard({user}) {
 
   const [dateRange, setDateRange]=useState([dayjs().subtract(7,'day'), dayjs()])
   const [habitsData, setHabitsData] = useState([])
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
+
   const getUpdatedHabits = async()=>{
     const startDate = dateRange[0].format('YYYY-MM-DD')
     const endDate = dateRange[1].format('YYYY-MM-DD')
     localStorage.setItem("date-range", JSON.stringify([startDate, endDate]))
     console.log(user)
-    const response = await axios.get(`http://localhost:5000/api/habit/filtered?startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`)
+    const response = await axios.get(url + `api/habit/filtered?startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`)
     setHabitsData(response.data)
   }
   useEffect(()=>{

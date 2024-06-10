@@ -22,6 +22,9 @@ const AddHabit = ({ user }) => {
   const [endDate, setEndDate] = useState("");
   const [numDays, setNumDays] = useState(1);
   const [loading, setLoading] = useState(false);
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
+
   useEffect(() => {
     if (localStorage.getItem("setHabit")) {
       setName(localStorage.getItem("setHabit"));
@@ -57,7 +60,7 @@ const AddHabit = ({ user }) => {
 
     try {
       const userId = user.uid;
-      await axios.post("http://localhost:5000/api/habit", data);
+      await axios.post(url+"api/habit", data);
       setName("");
       message.success("Habit added successfully!");
     } catch (error) {

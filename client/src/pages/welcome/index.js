@@ -21,11 +21,13 @@ function Welcome({ user }) {
     }
     router.push("/add-habit");
   };
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
 
   const fetchHabits = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/habit/${user.uid}`
+        `api/habit/${user.uid}`
       );
       if(response.data.length>0){
         router.push('/dashboard')

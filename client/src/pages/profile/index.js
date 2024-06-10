@@ -10,12 +10,14 @@ import { useRouter } from "next/router";
 const Profile = ({ user }) => {
   const [habits, setHabits] = useState([]);
   const router = useRouter();
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
 
   useEffect(() => {
     const fetchHabits = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/habit/${user.uid}`
+          `api/habit/${user.uid}`
         );
         setHabits(response.data);
       } catch (error) {

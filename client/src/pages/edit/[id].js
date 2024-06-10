@@ -28,11 +28,13 @@ const AddHabit = ({ user }) => {
   useEffect(() => {
     const arr = window.location.href.split('/')
     const id = arr[arr.length - 1]
-
+    let url = "http://localhost:5000/"
+    url = "https://habit-tracker-server.vercel.app/"
+  
     if (id) {
         const fetchHabit = async () => {
           try {
-            const response = await axios.get(`http://localhost:5000/api/habit/single/${id}`);
+            const response = await axios.get(url + `api/habit/single/${id}`);
             console.log(response.data)
             const habitObj = response.data
             setName(habitObj.name)
@@ -70,7 +72,7 @@ const AddHabit = ({ user }) => {
       const arr = window.location.href.split('/')
       const id = arr[arr.length - 1]
     
-      const response = await axios.put(`http://localhost:5000/api/habit/${id}`, values);
+      const response = await axios.put(url + `/api/habit/${id}`, values);
       console.log(response.data)
       message.success('Habit updated successfully!');
       setTimeout(()=>{

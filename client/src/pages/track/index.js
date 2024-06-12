@@ -106,7 +106,9 @@ const Home = ({ user }) => {
     <div className="maxContainer">
       <LogoutButton/>
       <Card className="w-[100%] text-left">
-        <DatePicker
+      
+        <div className="text-center text-lg  mt-16 -mb-4">
+          Make Entries for  &nbsp; <DatePicker
           value={dayjs(date)}
           onChange={(val) => {
             val
@@ -118,12 +120,10 @@ const Home = ({ user }) => {
           minDate={dayjs(minStartDate)}
         />
 
-        <div className="text-center font-semibold mt-4 -mb-4">
-          Make Entries for {date}
         </div>
-        {openHabits.length ? <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
+        {openHabits.length ? <div className="flex flex-col text-center mt-12 justify-center align-middle w-[100%]">
           {openHabits.map((habit) => (
-            <Card className="w-[90%] -ml-8 my-2 text-md text-left font-semibold">
+            <Card className="w-[90%] ml-[5%] my-2 text-md text-left font-semibold">
               <div className="flex flex-row justify-between">
 
               <div className="">{habit.name}</div>

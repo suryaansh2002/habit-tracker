@@ -22,7 +22,7 @@ const LogoutButton = () => {
   return (
     <Button
       type="primary"
-      className="absolute top-4 right-4 text-lg p-4"
+      className="absolute top-4 right-4 text-lg p-4 z-10"
       onClick={handleLogout}
     >
       Logout

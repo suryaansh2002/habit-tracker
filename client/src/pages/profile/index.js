@@ -30,17 +30,17 @@ const Profile = ({ user }) => {
   }, [user.uid]);
 
   return (
-    <div className="">
+    <div className="maxContainer">
       <LogoutButton />
-      <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100vw]">
+      <div className="flex flex-col text-center justify-center items-center h-max pt-8 w-[100%]">
         <div className="text-2xl font-bold mb-8"> {user.displayName}</div>
         {habits.map((habit) => (
-          <div className="rounded-lg p-6 shadow-lg w-[90vw] flex flex-row justify-between my-2">
+          <div className="rounded-lg p-6 shadow-lg w-[90%] flex flex-row justify-between my-2">
             <div className="text-left">
               <div className="text-lg ">{habit.name}</div>
               <div className="text-xs">
                 {moment(habit.startDate).format("DD MMM YY")}-{" "}
-                {moment(habit.endDate).format("DD MMM YY")}
+                {moment(habit.endDate).format("DD MMM YY") != 'Invalid date' ? moment(habit.endDate).format("DD MMM YY") : 'No End Date'}
               </div>
             </div>
             <div>
@@ -50,13 +50,13 @@ const Profile = ({ user }) => {
         ))}
           <Button
           onClick={() => router.push('create')}
-          className="w-[90%] bg-gray-700 text-white  p-4 text-lg py-6"
+          className="w-[90%] bg-gray-700 text-white  p-4 text-lg py-6 mb-20"
         >
           Create New Habit
         </Button>
 
       </div>
-      <BottomNav />
+      <BottomNav highlight={'profile'}/>
     </div>
   );
 };

@@ -9,7 +9,49 @@
     text-wrap: balance;
   }
 }
+@media only screen and (min-width: 992px) {
+.maxContainer{
+  max-width: 500px;
+  position: relative;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  min-height: 100vh;
+}
+}
 
+/* It's possible to change the styles coming from the library. Use the exact names as you see them when reviewing in Chrome Dev Tools (the classes from library start with "ant"). In order to do so in your .less file add media queries covering the screens with maximum width of 480px. It's enough to change the following 2 classes: */
+
+/* @media (max-width: 480px) { */
+    .ant-calendar-range {
+        width: 320px;
+    }
+    .ant-calendar-range-part {
+        width: 100%;
+    }
+    .ant-picker-panels { 
+      flex-direction: column !important;
+    } 
+    .ant-picker-panels > *:first-child button.ant-picker-header-next-btn {
+      visibility: visible !important;
+    }
+    
+    .ant-picker-panels > *:first-child button.ant-picker-header-super-next-btn {
+      visibility: visible !important;
+    }
+    
+    .ant-picker-panels > *:last-child {
+      display: none !important;
+    }
+    
+    .ant-picker-panel-container, .ant-picker-footer {
+      width: 280px !important;
+    }
+    
+    .ant-picker-footer-extra > div {
+      flex-wrap: wrap !important; 
+    }
+    
+/* } */
 html {
   overflow-x: hidden !important;
 }

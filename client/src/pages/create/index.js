@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -14,6 +14,8 @@ function Create({ user }) {
     "Sleep 8 Hours",
   ];
   const router = useRouter();
+  let url = "http://localhost:5000/"
+  url = "https://habit-tracker-server.vercel.app/"
 
   const addHabit = (setHabit) => {
     if (setHabit) {
@@ -21,22 +23,30 @@ function Create({ user }) {
     }
     router.push("/add-habit");
   };
-
+  const [habits, setHabits] = useState([]);
+  useEffect(() => {
+    fetchHabits();
+  }, []);
+  const fetchHabits = async () => {
+    try {
+      const response = await axios.get(url + `api/habit/${user.uid}`);
+      setHabits(response.data.map((item) => item.name));
+    } catch (error) {
+      console.error("Error fetching habits:", error);
+    }
+  };
 
   return (
-    <div>
+    <div className="maxContainer">
       <LogoutButton />
-      <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100vw]">
-        <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
-          Welcome {user.displayName.split(" ")[0]}
-        </div>
-        <div className="text-xl font-semibold text-left text-gray-900 border-gray mb-4">
+      <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
+        <div className="text-xl font-semibold text-center text-gray-900 border-gray mb-4">
           Create Your next habit now!
           <br />
           <br />
           Pick from Popular Habits-
         </div>
-        {habitOptions.map((habit) => (
+        {habitOptions.map((habit) => habits.includes(habit)  ? <></> : (
           <div className="text-lg mb-4  bg-yellow-200 flex justify-between w-[80%] p-2 rounded-md">
             {habit}{" "}
             <Button

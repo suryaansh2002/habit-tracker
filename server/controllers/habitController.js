@@ -22,6 +22,31 @@ exports.getHabitsByUser = async (req, res) => {
   }
 };
 
+exports.getUserStartDate = async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const habits = await Habit.find({ userId });
+    let startDate = ''
+    if(habits.length){
+      startDate = moment(habits[0].startDate)
+      habits.map((item)=>{
+        if(moment(item['startDate']).isBefore(startDate)){
+          startDate=moment(item['startDate'])
+        }
+      })
+    }
+    if(startDate==''){
+        res.status(200).json({startDate});
+      return
+    }
+    startDate = startDate.format('YYYY-MM-DD')
+    res.status(200).json({startDate});
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 exports.getHabitById = async (req, res) => {
   const { id } = req.params;
 
@@ -92,7 +117,7 @@ exports.getFilteredHabits = async (req, res) => {
     }
   }
   )
-  // console.log(habits)
+
   let filteredHabits1 = habits.filter(
     (habit) =>
       moment(habit.startDate).isSameOrBefore(moment(startDate)) &&
@@ -148,14 +173,22 @@ exports.getFilteredHabits = async (req, res) => {
     };
   });
 
-
   let totalFilteredHabits = [
     ...filteredHabits1,
     ...filteredHabits2,
     ...filteredHabits3,
     ...filteredHabits4,
   ];
-  console.log(filteredHabits3)
+  const seen = {};
+  totalFilteredHabits =  totalFilteredHabits.filter(item => {
+    if (seen[item._id]) {
+      return false;
+    } else {
+      seen[item._id] = true;
+      return true;
+    }
+  });
+
   totalFilteredHabits = totalFilteredHabits.map((habit) => {
     return {
       ...habit,

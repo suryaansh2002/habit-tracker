@@ -5,11 +5,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import withAuth from "@/hoc/withAuth";
 import LogoutButton from "@/components/LogoutButton";
 import BottomNav from "@/components/BottomNav";
-import { DatePicker, Progress } from 'antd';
+import { DatePicker, Progress } from "antd";
 import dayjs from "dayjs";
-import styled from 'styled-components';
+import styled from "styled-components";
 import axios from "axios";
-
+import moment from "moment";
 
 const StyleWrapperDatePicker = styled.div`
   .ant-picker-panel {
@@ -18,7 +18,8 @@ const StyleWrapperDatePicker = styled.div`
       .ant-picker-header {
         position: absolute;
         right: 0;
-        .ant-picker-header-prev-btn, .ant-picker-header-view {
+        .ant-picker-header-prev-btn,
+        .ant-picker-header-view {
           visibility: hidden;
         }
       }
@@ -28,10 +29,11 @@ const StyleWrapperDatePicker = styled.div`
       }
 
       @media (min-width: 768px) {
-        width: 280px!important;
+        width: 280px !important;
         .ant-picker-header {
           position: relative;
-          .ant-picker-header-prev-btn, .ant-picker-header-view {
+          .ant-picker-header-prev-btn,
+          .ant-picker-header-view {
             visibility: initial;
           }
         }
@@ -44,70 +46,95 @@ const StyleWrapperDatePicker = styled.div`
   }
 `;
 
-function Dashboard({user}) {
-
-  const [dateRange, setDateRange]=useState([dayjs().subtract(7,'day'), dayjs()])
-  const [habitsData, setHabitsData] = useState([])
-  let url = "http://localhost:5000/"
+function Dashboard({ user }) {
+  const [dateRange, setDateRange] = useState([
+    dayjs().subtract(7, "day"),
+    dayjs(),
+  ]);
+  const [habitsData, setHabitsData] = useState([]);
+  const [minStartDate, setMinStartDate] = useState("");
+  let url = "http://localhost:5000/";
   url = "https://habit-tracker-server.vercel.app/"
 
-  const getUpdatedHabits = async()=>{
-    const startDate = dateRange[0].format('YYYY-MM-DD')
-    const endDate = dateRange[1].format('YYYY-MM-DD')
-    localStorage.setItem("date-range", JSON.stringify([startDate, endDate]))
-    console.log(user)
-    const response = await axios.get(url + `api/habit/filtered?startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`)
-    setHabitsData(response.data)
-  }
-  useEffect(()=>{
-    let dateRangeLocal = localStorage.getItem("date-range")
-    if(dateRangeLocal){
-      dateRangeLocal = JSON.parse(dateRangeLocal)
-      console.log(dateRangeLocal)
-      // setDateRange(JSON.parse(dateRangeLocal))
+  const getMinStartDate = async () => {
+    const response = await axios.get(
+      url + `api/habit/startDate?userId=${user.uid}`
+    );
+    setMinStartDate(response.data.startDate);
+  };
+
+  const getUpdatedHabits = async () => {
+    const startDate = dateRange[0].format("YYYY-MM-DD");
+    const endDate = dateRange[1].format("YYYY-MM-DD");
+    localStorage.setItem("date-range", JSON.stringify([startDate, endDate]));
+    const response = await axios.get(
+      url +
+        `api/habit/filtered?startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`
+    );
+    setHabitsData(response.data);
+  };
+
+  useEffect(() => {
+    let dateRangeLocal = localStorage.getItem("date-range");
+    if (dateRangeLocal) {
+      dateRangeLocal = JSON.parse(dateRangeLocal);
+      let tempArr = [dayjs(dateRangeLocal[0]), dayjs(dateRangeLocal[1])];
+      setDateRange(tempArr);
     }
-  },[])
-  useEffect(()=>{
-    getUpdatedHabits()
-  },[dateRange])
+    getMinStartDate();
+  }, []);
+  useEffect(() => {
+    getUpdatedHabits();
+  }, [dateRange]);
   const panelRender = (panelNode) => (
-    <StyleWrapperDatePicker>
-      {panelNode}
-    </StyleWrapperDatePicker>
+    <StyleWrapperDatePicker>{panelNode}</StyleWrapperDatePicker>
   );
 
   return (
-    <div>
+    <div className="maxContainer">
       <LogoutButton />
-      <div className="text-center mt-16">
-        <DatePicker.RangePicker 
-        panelRender={panelRender}
-        defaultValue={dateRange}
-        onChange={(e)=>setDateRange(e)}
-        allowClear={false}
+      <div className="text-center pt-16">
+        <DatePicker.RangePicker
+          // panelRender={panelRender}
+          defaultValue={dateRange}
+          onChange={(e) => setDateRange(e)}
+          allowClear={false}
+          maxDate={dayjs()}
+          minDate={dayjs(minStartDate)}
         />
       </div>
-      <div className="mt-8 mx-6">
-        {
-          habitsData.map((habit)=>
-          <div className="mb-8 bg-yellow-100 rounded-lg p-4">
-            <div className="flex justify-between">
-              <div className="font-semibold text-xl">
-                {habit.name}
+      {habitsData.length ? (
+        <div className="mt-8 mx-6">
+          {habitsData.map((habit) => (
+            <div className="mb-8 bg-yellow-100 rounded-lg p-4">
+              <div className="flex justify-between">
+                <div className="font-semibold text-xl">{habit.name}</div>
+                <div>
+                  {habit.countOfDaysDone} / {habit.totalDaysToDo} Days
+                </div>
               </div>
               <div>
-              {habit.countOfDaysDone} / {habit.totalDaysToDo} Days
+                <Progress
+                  percent={(habit.countOfDaysDone * 100) / habit.totalDaysToDo}
+                  format={(percent) => parseInt(percent).toString() + "%"}
+                />
               </div>
             </div>
-            <div>
-            <Progress percent={habit.countOfDaysDone*100 / habit.totalDaysToDo} format={(percent)=>parseInt(percent).toString()+"%"}/>
-
-              </div>
-          </div>
-          )
-        }
-      </div>
-      <BottomNav/>
+          ))}
+        </div>
+      ) : (
+        <div className="pt-12 text-lf text-center">
+          No data yet! Begin Tracking your habits here:{" "}
+          <a href="/track" className="font-bold">
+            Track
+          </a>{" "}
+          and add new habits to track here:{" "}
+          <a href="/profile" className="font-bold">
+            Profile
+          </a>
+        </div>
+      )}
+      <BottomNav highlight={"home"} />
     </div>
   );
 }

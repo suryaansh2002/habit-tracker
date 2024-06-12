@@ -20,7 +20,7 @@ const AddHabit = ({ user }) => {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
   const [endDate, setEndDate] = useState("");
-  const [numDays, setNumDays] = useState(1);
+  const [numDays, setNumDays] = useState("Select...");
   const [loading, setLoading] = useState(false);
   let url = "http://localhost:5000/"
   url = "https://habit-tracker-server.vercel.app/"
@@ -31,7 +31,7 @@ const AddHabit = ({ user }) => {
       localStorage.removeItem("setHabit");
     }
   }, []);
-  const days = [1, 2, 3, 4, 5, 6, 7];
+  const days = ["Select...",1, 2, 3, 4, 5, 6, 7];
   const items = days.map((item) => {
     return {
       label: <div onClick={() => setNumDays(item)}>{item}</div>,
@@ -46,9 +46,13 @@ const AddHabit = ({ user }) => {
       return;
     
     }
-    if (startDate == "Invalid Date") {
+    if (moment(startDate).format('YYYY-MM-DD') == "Invalid date") {
       message.error("Enter Start Date");
       return;
+    }
+    if(numDays === "Select..."){
+      message.error("Select number of days!")
+      return
     }
     const data = {
       name,
@@ -57,7 +61,6 @@ const AddHabit = ({ user }) => {
       endDate: endDate=="Invalid Date" ? "":endDate,
       numDays
     }
-
     try {
       const userId = user.uid;
       await axios.post(url+"api/habit", data);
@@ -72,51 +75,51 @@ const AddHabit = ({ user }) => {
   };
 
   return (
-    <div className="">
+    <div className="maxContainer">
       <LogoutButton />
-      <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100vw]">
+      <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
         <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
           Create a new Habit
         </div>
-        <Form className="text-left ml-[10vw]  w-[90vw]">
+        <Form className="text-center w-[70%]">
           <Form.Item>
-            <div>Title:</div>
+            <div className="text-left">Title:</div>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter Habit Title"
               required
-              className="p-2 w-[80%] my-2"
+              className="p-2 w-[100%] my-2"
             />
           </Form.Item>
           <div>
-            <div>Start Date:</div>
+            <div  className="text-left">Start Date:</div>
             <DatePicker
               format={"DD-MM-YYYY"}
               onChange={(val) => {
                 setStartDate(dayjs(val.$d).format("YYYY-MM-DD"));
               }}
               defaultValue={dayjs()}
-              className="p-2 w-[80%] my-2 mb-6"
+              className="p-2 w-[100%] my-2 mb-6"
               minDate={dayjs()}
               allowClear={false}
             />
           </div>
           <div>
-            <div>End Date:</div>
+            <div  className="text-left">End Date:</div>
             <DatePicker
               format={"DD-MM-YYYY"}
               onChange={(val) => {
                 setEndDate(dayjs(val.$d).format("YYYY-MM-DD"));
               }}
-              className="p-2 w-[80%] my-2 mb-6"
+              className="p-2 w-[100%] my-2 mb-6"
               minDate={dayjs(startDate)}
               allowClear={false}
             />
           </div>
           <div>
-            <div>No. of Days Weekly:</div>
-            <Dropdown menu={{ items }} className="w-[80%] mb-4 ">
+            <div  className="text-left">No. of Days Weekly:</div>
+            <Dropdown menu={{ items }} className="w-[100%] mb-4 ">
               <Button className="text-left">
                 <Space className="absolute left-4 w-[90%] flex justify-between">
                   {numDays}
@@ -128,7 +131,7 @@ const AddHabit = ({ user }) => {
           <Form.Item>
             <Button
             onClick={()=>handleAddHabit()}
-              className="w-[80%] bg-gray-700 text-white  p-4 text-lg py-6"
+              className="w-[100%] bg-gray-700 text-white  p-4 text-lg py-6"
               loading={loading}
             >
               Add Habit

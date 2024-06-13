@@ -92,7 +92,7 @@ function Dashboard({ user }) {
 
   return (
     <div className="maxContainer">
-      <LogoutButton />
+      {/* <LogoutButton /> */}
       <div className="text-center pt-16">
         <DatePicker.RangePicker
           // panelRender={panelRender}
@@ -104,7 +104,7 @@ function Dashboard({ user }) {
         />
       </div>
       {habitsData.length ? (
-        <div className="mt-8 mx-6">
+        <div className="mt-8 mx-6 h-max pb-12 !overflow-y-auto ">
           {habitsData.map((habit) => (
             <div className="mb-8 bg-yellow-100 rounded-lg p-4">
               <div className="flex justify-between">

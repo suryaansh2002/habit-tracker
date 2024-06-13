@@ -20,13 +20,13 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button
-      type="primary"
-      className="absolute top-4 right-4 text-lg p-4 z-10"
+    <div
+      type=""
+      className="text-sm text-right w-[90%] underline -mt-6"
       onClick={handleLogout}
     >
       Logout
-    </Button>
+    </div>
   );
 };
 

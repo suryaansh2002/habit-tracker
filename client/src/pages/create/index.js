@@ -38,7 +38,7 @@ function Create({ user }) {
 
   return (
     <div className="maxContainer">
-      <LogoutButton />
+      {/* <LogoutButton /> */}
       <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
         <div className="text-xl font-semibold text-center text-gray-900 border-gray mb-4">
           Create Your next habit now!

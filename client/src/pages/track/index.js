@@ -104,7 +104,7 @@ const Home = ({ user }) => {
   };
   return (
     <div className="maxContainer">
-      <LogoutButton/>
+      {/* <LogoutButton/> */}
       <Card className="w-[100%] text-left">
       
         <div className="text-center text-lg  mt-16 -mb-4">

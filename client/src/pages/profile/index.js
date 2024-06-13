@@ -31,11 +31,11 @@ const Profile = ({ user }) => {
 
   return (
     <div className="maxContainer">
-      <LogoutButton />
+      {/* <LogoutButton /> */}
       <div className="flex flex-col text-center justify-center items-center h-max pt-8 w-[100%]">
         <div className="text-2xl font-bold mt-8 mb-2"> {user.displayName}</div>
         <div className="text-md mb-8"> {user.email}</div>
-
+<LogoutButton/>
         {habits.map((habit) => (
           <div className="rounded-lg p-6 shadow-lg w-[90%] flex flex-row justify-between my-2">
             <div className="text-left">

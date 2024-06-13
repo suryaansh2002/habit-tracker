@@ -133,7 +133,7 @@ exports.getFilteredHabits = async (req, res) => {
   let filteredHabits2 = habits.filter(
     (habit) =>
       moment(habit.startDate).isSameOrBefore(moment(startDate)) &&
-      moment(habit.endDate).isAfter(moment(startDate)) &&
+      moment(habit.endDate).isSameOrAfter(moment(startDate)) &&
       moment(habit.endDate).isSameOrBefore(moment(endDate))
   );
 
@@ -147,7 +147,7 @@ exports.getFilteredHabits = async (req, res) => {
   let filteredHabits3 = habits.filter(
     (habit) =>
       moment(habit.startDate).isSameOrAfter(moment(startDate)) &&
-      moment(habit.startDate).isBefore(moment(endDate)) &&
+      moment(habit.startDate).isSameOrBefore(moment(endDate)) &&
       moment(habit.endDate).isSameOrAfter(moment(endDate))
   );
 

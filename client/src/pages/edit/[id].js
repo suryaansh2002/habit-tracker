@@ -87,7 +87,7 @@ const AddHabit = ({ user }) => {
 
   return (
     <div className="maxContainer">
-      <LogoutButton />
+      {/* <LogoutButton /> */}
       <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
         <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
           Update Habit

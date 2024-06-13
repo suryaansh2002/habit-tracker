@@ -54,6 +54,7 @@ const AddHabit = ({ user }) => {
       message.error("Select number of days!")
       return
     }
+
     const data = {
       name,
       userId: user.uid,
@@ -61,11 +62,15 @@ const AddHabit = ({ user }) => {
       endDate: endDate=="Invalid Date" ? "":endDate,
       numDays
     }
+
     try {
       const userId = user.uid;
       await axios.post(url+"api/habit", data);
       setName("");
       message.success("Habit added successfully!");
+      setTimeout(()=>{
+        window.location.href = './profile'
+      },1000)
     } catch (error) {
       console.error("Error adding habit:", error);
       message.error("Failed to add habit");
@@ -76,7 +81,7 @@ const AddHabit = ({ user }) => {
 
   return (
     <div className="maxContainer">
-      <LogoutButton />
+      {/* <LogoutButton /> */}
       <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
         <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
           Create a new Habit

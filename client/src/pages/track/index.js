@@ -6,6 +6,7 @@ import moment from "moment";
 import dayjs from "dayjs";
 import BottomNav from "@/components/BottomNav";
 import LogoutButton from "@/components/LogoutButton";
+import { analytics, logEvent } from '../../firebaseConfig';
 
 const Home = ({ user }) => {
   const [habits, setHabits] = useState([]);
@@ -100,6 +101,13 @@ const Home = ({ user }) => {
     const response = await axios.put(url + `api/habit/${id}`, {
       daysDone: tempDaysDone,
     });
+    if (typeof window !== 'undefined' && analytics) {
+      console.log("HERE")
+      console.log({ habit_name: selectedHabit.name, done: checked, habit_id: id })
+      const response = logEvent(analytics, 'track_habit', { habit_name: selectedHabit.name, done: checked, habit_id: id });
+      console.log(response)
+    }
+  
     fetchHabits();
   };
   return (

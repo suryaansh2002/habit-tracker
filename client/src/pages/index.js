@@ -4,12 +4,12 @@ import { auth, provider } from "../firebaseConfig";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { Button, Spin } from "antd";
+import { SIGNUP_URL } from "@/constants";
 
 export default function Home() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true)
-  let url = "http://localhost:5000/"
-  url = "https://habit-tracker-server.vercel.app/"
+  const [loading, setLoading] = useState(true);
+
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(async (result) => {
@@ -17,7 +17,7 @@ export default function Home() {
         localStorage.setItem("user", JSON.stringify(user));
 
         const { uid, displayName, email } = user;
-        await axios.post(url + "api/user", {
+        await axios.post(SIGNUP_URL, {
           uid,
           name: displayName,
           email,
@@ -31,9 +31,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     onAuthStateChanged(auth, (user) => {
-      setLoading(false)
+      setLoading(false);
       if (user) {
         router.push("/dashboard");
       }
@@ -48,7 +48,7 @@ export default function Home() {
         onClick={signInWithGoogle}
         disabled={loading}
       >
-      {  loading ? <Spin size="large"/> : 'Sign in with Google'}
+        {loading ? <Spin size="large" /> : "Sign in with Google"}
       </Button>
     </div>
   );

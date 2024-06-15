@@ -10,6 +10,11 @@ import dayjs from "dayjs";
 import styled from "styled-components";
 import axios from "axios";
 import moment from "moment";
+import {
+  FETCH_FILTERED_HABITS_URL,
+  FETCH_MIN_START_DATE_URL,
+} from "@/constants";
+import CustomSpinner from "@/components/CustomSpinner";
 
 const StyleWrapperDatePicker = styled.div`
   .ant-picker-panel {
@@ -53,25 +58,25 @@ function Dashboard({ user }) {
   ]);
   const [habitsData, setHabitsData] = useState([]);
   const [minStartDate, setMinStartDate] = useState("");
-  let url = "http://localhost:5000/";
-  url = "https://habit-tracker-server.vercel.app/"
-
+  const [loading, setLoading] = useState(false)
   const getMinStartDate = async () => {
     const response = await axios.get(
-      url + `api/habit/startDate?userId=${user.uid}`
+      FETCH_MIN_START_DATE_URL + `userId=${user.uid}`,
     );
     setMinStartDate(response.data.startDate);
   };
 
   const getUpdatedHabits = async () => {
+    setLoading(true)
     const startDate = dateRange[0].format("YYYY-MM-DD");
     const endDate = dateRange[1].format("YYYY-MM-DD");
     localStorage.setItem("date-range", JSON.stringify([startDate, endDate]));
     const response = await axios.get(
-      url +
-        `api/habit/filtered?startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`
+      FETCH_FILTERED_HABITS_URL +
+        `startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`,
     );
     setHabitsData(response.data);
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -93,6 +98,7 @@ function Dashboard({ user }) {
   return (
     <div className="maxContainer">
       {/* <LogoutButton /> */}
+{loading ? <CustomSpinner/> :      <div>
       <div className="text-center pt-16">
         <DatePicker.RangePicker
           // panelRender={panelRender}
@@ -134,6 +140,8 @@ function Dashboard({ user }) {
           </a>
         </div>
       )}
+      </div>}
+
       <BottomNav highlight={"home"} />
     </div>
   );

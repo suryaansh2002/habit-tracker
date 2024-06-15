@@ -1,6 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getAnalytics, logEvent, setUserId, setUserProperties } from "firebase/analytics";
+import {
+  getAnalytics,
+  logEvent,
+  setUserId,
+  setUserProperties,
+} from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCosPNw6mySxTFLZpT5RNMRgitLQIRGFcE",

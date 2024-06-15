@@ -6,6 +6,7 @@ import withAuth from "@/hoc/withAuth";
 import LogoutButton from "@/components/LogoutButton";
 import { Button, Card } from "antd";
 import axios from "axios";
+import { FETCH_USER_HABITS_URL } from "@/constants";
 function Welcome({ user }) {
   const habitOptions = [
     "Exercise",
@@ -21,26 +22,21 @@ function Welcome({ user }) {
     }
     router.push("/add-habit");
   };
-  let url = "http://localhost:5000/"
-  url = "https://habit-tracker-server.vercel.app/"
 
   const fetchHabits = async () => {
     try {
-      const response = await axios.get(
-        url +
-        `api/habit/${user.uid}`
-      );
-      if(response.data.length>0){
-        router.push('/dashboard')
+      const response = await axios.get(FETCH_USER_HABITS_URL + `${user.uid}`);
+      if (response.data.length > 0) {
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Error fetching habits:", error);
     }
   };
 
-  useEffect(()=>{
-    fetchHabits()
-  },[])
+  useEffect(() => {
+    fetchHabits();
+  }, []);
   return (
     <div>
       {/* <LogouwtButton /> */}

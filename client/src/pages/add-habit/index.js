@@ -15,6 +15,7 @@ import moment from "moment";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import BottomNav from "@/components/BottomNav";
+import { ADD_HABIT_URL } from "@/constants";
 
 const AddHabit = ({ user }) => {
   const [name, setName] = useState("");
@@ -22,8 +23,6 @@ const AddHabit = ({ user }) => {
   const [endDate, setEndDate] = useState("");
   const [numDays, setNumDays] = useState("Select...");
   const [loading, setLoading] = useState(false);
-  let url = "http://localhost:5000/"
-  url = "https://habit-tracker-server.vercel.app/"
 
   useEffect(() => {
     if (localStorage.getItem("setHabit")) {
@@ -31,7 +30,7 @@ const AddHabit = ({ user }) => {
       localStorage.removeItem("setHabit");
     }
   }, []);
-  const days = ["Select...",1, 2, 3, 4, 5, 6, 7];
+  const days = ["Select...", 1, 2, 3, 4, 5, 6, 7];
   const items = days.map((item) => {
     return {
       label: <div onClick={() => setNumDays(item)}>{item}</div>,
@@ -41,36 +40,35 @@ const AddHabit = ({ user }) => {
 
   const handleAddHabit = async () => {
     // setLoading(true);
-    if(!name){
+    if (!name) {
       message.error("Enter Title");
       return;
-    
     }
-    if (moment(startDate).format('YYYY-MM-DD') == "Invalid date") {
+    if (moment(startDate).format("YYYY-MM-DD") == "Invalid date") {
       message.error("Enter Start Date");
       return;
     }
-    if(numDays === "Select..."){
-      message.error("Select number of days!")
-      return
+    if (numDays === "Select...") {
+      message.error("Select number of days!");
+      return;
     }
 
     const data = {
       name,
       userId: user.uid,
       startDate,
-      endDate: endDate=="Invalid Date" ? "":endDate,
-      numDays
-    }
+      endDate: endDate == "Invalid Date" ? "" : endDate,
+      numDays,
+    };
 
     try {
       const userId = user.uid;
-      await axios.post(url+"api/habit", data);
+      await axios.post(ADD_HABIT_URL, data);
       setName("");
       message.success("Habit added successfully!");
-      setTimeout(()=>{
-        window.location.href = './profile'
-      },1000)
+      setTimeout(() => {
+        window.location.href = "./profile";
+      }, 1000);
     } catch (error) {
       console.error("Error adding habit:", error);
       message.error("Failed to add habit");
@@ -98,7 +96,7 @@ const AddHabit = ({ user }) => {
             />
           </Form.Item>
           <div>
-            <div  className="text-left">Start Date:</div>
+            <div className="text-left">Start Date:</div>
             <DatePicker
               format={"DD-MM-YYYY"}
               onChange={(val) => {
@@ -111,7 +109,7 @@ const AddHabit = ({ user }) => {
             />
           </div>
           <div>
-            <div  className="text-left">End Date:</div>
+            <div className="text-left">End Date:</div>
             <DatePicker
               format={"DD-MM-YYYY"}
               onChange={(val) => {
@@ -123,7 +121,7 @@ const AddHabit = ({ user }) => {
             />
           </div>
           <div>
-            <div  className="text-left">No. of Days Weekly:</div>
+            <div className="text-left">No. of Days Weekly:</div>
             <Dropdown menu={{ items }} className="w-[100%] mb-4 ">
               <Button className="text-left">
                 <Space className="absolute left-4 w-[90%] flex justify-between">
@@ -135,7 +133,7 @@ const AddHabit = ({ user }) => {
           </div>
           <Form.Item>
             <Button
-            onClick={()=>handleAddHabit()}
+              onClick={() => handleAddHabit()}
               className="w-[100%] bg-gray-700 text-white  p-4 text-lg py-6"
               loading={loading}
             >
@@ -144,7 +142,7 @@ const AddHabit = ({ user }) => {
           </Form.Item>
         </Form>
       </div>
-      <BottomNav/>
+      <BottomNav />
     </div>
   );
 };

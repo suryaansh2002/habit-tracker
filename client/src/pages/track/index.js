@@ -7,7 +7,11 @@ import dayjs from "dayjs";
 import BottomNav from "@/components/BottomNav";
 import LogoutButton from "@/components/LogoutButton";
 import { analytics, logEvent } from "../../firebaseConfig";
-import { FETCH_MIN_START_DATE_URL, FETCH_USER_HABITS_URL, UPDATE_USER_HABIT_URL } from "@/constants";
+import {
+  FETCH_MIN_START_DATE_URL,
+  FETCH_USER_HABITS_URL,
+  UPDATE_USER_HABIT_URL,
+} from "@/constants";
 import CustomSpinner from "@/components/CustomSpinner";
 
 const Home = ({ user }) => {
@@ -16,7 +20,7 @@ const Home = ({ user }) => {
   const [openHabits, setOpenHabits] = useState([]);
   const [activeHabits, setActiveHabits] = useState([]);
   const [minStartDate, setMinStartDate] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const getMinStartDate = async () => {
     const response = await axios.get(
       FETCH_MIN_START_DATE_URL + `userId=${user.uid}`,
@@ -24,7 +28,7 @@ const Home = ({ user }) => {
     setMinStartDate(response.data.startDate);
   };
   const fetchInitialHabits = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await axios.get(FETCH_USER_HABITS_URL + `${user.uid}`);
       setHabits(response.data);
@@ -49,7 +53,7 @@ const Home = ({ user }) => {
     } catch (error) {
       console.error("Error fetching habits:", error);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   const fetchHabits = async () => {
@@ -119,47 +123,51 @@ const Home = ({ user }) => {
   return (
     <div className="maxContainer">
       {/* <LogoutButton/> */}
-     {loading ? <CustomSpinner/> : <Card className="w-[100%] text-left">
-        <div className="text-center text-lg  mt-16 -mb-4">
-          Make Entries for &nbsp;{" "}
-          <DatePicker
-            value={dayjs(date)}
-            onChange={(val) => {
-              val
-                ? setDate(dayjs(val.$d).format("YYYY-MM-DD"))
-                : setDate(dayjs().format("YYYY-MM-DD"));
-            }}
-            maxDate={dayjs()}
-            allowClear={false}
-            minDate={dayjs(minStartDate)}
-          />
-        </div>
-        {openHabits.length ? (
-          <div className="flex flex-col text-center mt-12 justify-center align-middle w-[100%]">
-            {openHabits.map((habit) => (
-              <Card className="w-[90%] ml-[5%] my-2 text-md text-left font-semibold">
-                <div className="flex flex-row justify-between">
-                  <div className="">{habit.name}</div>
-                  <div className="">
-                    <Switch
-                      checked={activeHabits.includes(habit._id)}
-                      onChange={(checked) => handleChange(checked, habit._id)}
-                    />
+      {loading ? (
+        <CustomSpinner />
+      ) : (
+        <Card className="w-[100%] text-left">
+          <div className="text-center text-lg  mt-16 -mb-4">
+            Make Entries for &nbsp;{" "}
+            <DatePicker
+              value={dayjs(date)}
+              onChange={(val) => {
+                val
+                  ? setDate(dayjs(val.$d).format("YYYY-MM-DD"))
+                  : setDate(dayjs().format("YYYY-MM-DD"));
+              }}
+              maxDate={dayjs()}
+              allowClear={false}
+              minDate={dayjs(minStartDate)}
+            />
+          </div>
+          {openHabits.length ? (
+            <div className="flex flex-col text-center mt-12 justify-center align-middle w-[100%]">
+              {openHabits.map((habit) => (
+                <Card className="w-[90%] ml-[5%] my-2 text-md text-left font-semibold">
+                  <div className="flex flex-row justify-between">
+                    <div className="">{habit.name}</div>
+                    <div className="">
+                      <Switch
+                        checked={activeHabits.includes(habit._id)}
+                        onChange={(checked) => handleChange(checked, habit._id)}
+                      />
+                    </div>
                   </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="pt-12 text-lf text-center">
-            No habits for this date! Select a different date or add new habits
-            to track here:{" "}
-            <a href="/profile" className="font-bold">
-              Profile
-            </a>
-          </div>
-        )}
-      </Card>}
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="pt-12 text-lf text-center">
+              No habits for this date! Select a different date or add new habits
+              to track here:{" "}
+              <a href="/profile" className="font-bold">
+                Profile
+              </a>
+            </div>
+          )}
+        </Card>
+      )}
       <BottomNav highlight={"track"} />
     </div>
   );

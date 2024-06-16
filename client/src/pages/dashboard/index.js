@@ -58,7 +58,7 @@ function Dashboard({ user }) {
   ]);
   const [habitsData, setHabitsData] = useState([]);
   const [minStartDate, setMinStartDate] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const getMinStartDate = async () => {
     const response = await axios.get(
       FETCH_MIN_START_DATE_URL + `userId=${user.uid}`,
@@ -67,7 +67,7 @@ function Dashboard({ user }) {
   };
 
   const getUpdatedHabits = async () => {
-    setLoading(true)
+    setLoading(true);
     const startDate = dateRange[0].format("YYYY-MM-DD");
     const endDate = dateRange[1].format("YYYY-MM-DD");
     localStorage.setItem("date-range", JSON.stringify([startDate, endDate]));
@@ -76,7 +76,7 @@ function Dashboard({ user }) {
         `startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`,
     );
     setHabitsData(response.data);
-    setLoading(false)
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -98,49 +98,55 @@ function Dashboard({ user }) {
   return (
     <div className="maxContainer">
       {/* <LogoutButton /> */}
-{loading ? <CustomSpinner/> :      <div>
-      <div className="text-center pt-16">
-        <DatePicker.RangePicker
-          // panelRender={panelRender}
-          defaultValue={dateRange}
-          onChange={(e) => setDateRange(e)}
-          allowClear={false}
-          maxDate={dayjs()}
-          minDate={dayjs(minStartDate)}
-        />
-      </div>
-      {habitsData.length ? (
-        <div className="mt-8 mx-6 h-max pb-12 !overflow-y-auto ">
-          {habitsData.map((habit) => (
-            <div className="mb-8 bg-yellow-100 rounded-lg p-4">
-              <div className="flex justify-between">
-                <div className="font-semibold text-xl">{habit.name}</div>
-                <div>
-                  {habit.countOfDaysDone} / {habit.totalDaysToDo} Days
-                </div>
-              </div>
-              <div>
-                <Progress
-                  percent={(habit.countOfDaysDone * 100) / habit.totalDaysToDo}
-                  format={(percent) => parseInt(percent).toString() + "%"}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+      {loading ? (
+        <CustomSpinner />
       ) : (
-        <div className="pt-12 text-lf text-center">
-          No data yet! Begin Tracking your habits here:{" "}
-          <a href="/track" className="font-bold">
-            Track
-          </a>{" "}
-          and add new habits to track here:{" "}
-          <a href="/profile" className="font-bold">
-            Profile
-          </a>
+        <div>
+          <div className="text-center pt-16">
+            <DatePicker.RangePicker
+              // panelRender={panelRender}
+              defaultValue={dateRange}
+              onChange={(e) => setDateRange(e)}
+              allowClear={false}
+              maxDate={dayjs()}
+              minDate={dayjs(minStartDate)}
+            />
+          </div>
+          {habitsData.length ? (
+            <div className="mt-8 mx-6 h-max pb-12 !overflow-y-auto ">
+              {habitsData.map((habit) => (
+                <div className="mb-8 bg-yellow-100 rounded-lg p-4">
+                  <div className="flex justify-between">
+                    <div className="font-semibold text-xl">{habit.name}</div>
+                    <div>
+                      {habit.countOfDaysDone} / {habit.totalDaysToDo} Days
+                    </div>
+                  </div>
+                  <div>
+                    <Progress
+                      percent={
+                        (habit.countOfDaysDone * 100) / habit.totalDaysToDo
+                      }
+                      format={(percent) => parseInt(percent).toString() + "%"}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="pt-12 text-lf text-center">
+              No data yet! Begin Tracking your habits here:{" "}
+              <a href="/track" className="font-bold">
+                Track
+              </a>{" "}
+              and add new habits to track here:{" "}
+              <a href="/profile" className="font-bold">
+                Profile
+              </a>
+            </div>
+          )}
         </div>
       )}
-      </div>}
 
       <BottomNav highlight={"home"} />
     </div>

@@ -25,7 +25,7 @@ const AddHabit = ({ user }) => {
   const [endDate, setEndDate] = useState("");
   const [numDays, setNumDays] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [loading2, setLoading2] = useState((false))
+  const [loading2, setLoading2] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,17 +35,17 @@ const AddHabit = ({ user }) => {
     if (id) {
       const fetchHabit = async () => {
         try {
-          setLoading2(true)
+          setLoading2(true);
           const response = await axios.get(FETCH_SIGNLE_HABIT_URL + `${id}`);
           const habitObj = response.data;
           setName(habitObj.name);
           setStartDate(habitObj.startDate);
           setEndDate(habitObj.endDate);
           setNumDays(habitObj.numDays);
-          setLoading2(false)
+          setLoading2(false);
         } catch (error) {
           console.error("Error fetching habit:", error);
-          setLoading2(false)
+          setLoading2(false);
         }
       };
 
@@ -88,74 +88,78 @@ const AddHabit = ({ user }) => {
   return (
     <div className="maxContainer">
       {/* <LogoutButton /> */}
-      {loading2 ? <CustomSpinner/> : <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
-        <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
-          Update Habit
-        </div>
-        {name && startDate && (
-          <Form className="text-center w-[70%]">
-            <Form.Item>
-              <div className="text-left">Title:</div>
-              <Input
-                value={name}
-                defaultValue={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter Habit Title"
-                required
-                className="p-2 w-[100%] my-2"
-              />
-            </Form.Item>
-            <div>
-              <div className="text-left">Start Date:</div>
-              <DatePicker
-                format={"DD-MM-YYYY"}
-                onChange={(val) => {
-                  setStartDate(dayjs(val.$d).format("YYYY-MM-DD"));
-                }}
-                defaultValue={dayjs(startDate)}
-                className="p-2 w-[100%] my-2 mb-6"
-                minDate={dayjs()}
-                allowClear={false}
-              />
-            </div>
-            <div>
-              <div className="text-left">End Date:</div>
-              <DatePicker
-                format={"DD-MM-YYYY"}
-                onChange={(val) => {
-                  val
-                    ? setEndDate(dayjs(val.$d).format("YYYY-MM-DD"))
-                    : setEndDate("");
-                }}
-                className="p-2 w-[100%] my-2 mb-6"
-                minDate={dayjs(startDate)}
-                allowClear={true}
-                value={endDate ? dayjs(endDate) : ""}
-              />
-            </div>
-            <div>
-              <div className="text-left">No. of Days Weekly:</div>
-              <Dropdown menu={{ items }} className="w-[100%] mb-4 ">
-                <Button className="text-left">
-                  <Space className="absolute left-4 w-[90%] flex justify-between">
-                    {numDays}
-                    <DownOutlined />
-                  </Space>
+      {loading2 ? (
+        <CustomSpinner />
+      ) : (
+        <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
+          <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
+            Update Habit
+          </div>
+          {name && startDate && (
+            <Form className="text-center w-[70%]">
+              <Form.Item>
+                <div className="text-left">Title:</div>
+                <Input
+                  value={name}
+                  defaultValue={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter Habit Title"
+                  required
+                  className="p-2 w-[100%] my-2"
+                />
+              </Form.Item>
+              <div>
+                <div className="text-left">Start Date:</div>
+                <DatePicker
+                  format={"DD-MM-YYYY"}
+                  onChange={(val) => {
+                    setStartDate(dayjs(val.$d).format("YYYY-MM-DD"));
+                  }}
+                  defaultValue={dayjs(startDate)}
+                  className="p-2 w-[100%] my-2 mb-6"
+                  minDate={dayjs()}
+                  allowClear={false}
+                />
+              </div>
+              <div>
+                <div className="text-left">End Date:</div>
+                <DatePicker
+                  format={"DD-MM-YYYY"}
+                  onChange={(val) => {
+                    val
+                      ? setEndDate(dayjs(val.$d).format("YYYY-MM-DD"))
+                      : setEndDate("");
+                  }}
+                  className="p-2 w-[100%] my-2 mb-6"
+                  minDate={dayjs(startDate)}
+                  allowClear={true}
+                  value={endDate ? dayjs(endDate) : ""}
+                />
+              </div>
+              <div>
+                <div className="text-left">No. of Days Weekly:</div>
+                <Dropdown menu={{ items }} className="w-[100%] mb-4 ">
+                  <Button className="text-left">
+                    <Space className="absolute left-4 w-[90%] flex justify-between">
+                      {numDays}
+                      <DownOutlined />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              </div>
+              <Form.Item>
+                <Button
+                  onClick={() => handleUpdateHabit()}
+                  className="w-[100%] bg-gray-700 text-white  p-4 text-lg py-6"
+                  loading={loading}
+                >
+                  Update Habit
                 </Button>
-              </Dropdown>
-            </div>
-            <Form.Item>
-              <Button
-                onClick={() => handleUpdateHabit()}
-                className="w-[100%] bg-gray-700 text-white  p-4 text-lg py-6"
-                loading={loading}
-              >
-                Update Habit
-              </Button>
-            </Form.Item>
-          </Form>
-        )}
-      </div>}
+              </Form.Item>
+            </Form>
+          )}
+        </div>
+      )}
       <BottomNav highlight={"profile"} />
     </div>
   );

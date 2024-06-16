@@ -10,7 +10,7 @@ router.post('/', masterHabitController.createMasterHabit);
 router.get('/categories', masterHabitController.getAllUniqueCategories);
 
 // Get all habits for one category
-router.get('/:categoryName/habits', masterHabitController.getHabitsByCategory);
+router.post('/categoryHabits', masterHabitController.getHabitsByCategory);
 
 // Update existing entry
 router.put('/:id', masterHabitController.updateMasterHabit);

@@ -7,6 +7,7 @@ const habitSchema = new mongoose.Schema({
   endDate: {type: String},
   numDays : {type: Number},
   userId: { type: String },
+  masterHabitId: { type: String, required: false, default:"" },
   daysDone: { type: [String], default: [] },
 });
 

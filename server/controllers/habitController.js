@@ -22,6 +22,19 @@ exports.getHabitsByUser = async (req, res) => {
   }
 };
 
+
+exports.getHabitsByMasterId = async (req, res) => {
+  const { masterHabitId } = req.params;
+
+  try {
+    const habits = await Habit.find({ masterHabitId });
+    res.status(200).json(habits);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
 exports.getUserStartDate = async (req, res) => {
   const { userId } = req.query;
   try {

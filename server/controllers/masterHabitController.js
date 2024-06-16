@@ -26,7 +26,7 @@ exports.getAllUniqueCategories = async (req, res) => {
 // Get all habits for one category
 exports.getHabitsByCategory = async (req, res) => {
   try {
-    const { categoryName } = req.params;
+    const { categoryName } = req.body;
     const habits = await MasterHabit.find({ categoryName });
     res.status(200).json(habits);
   } catch (err) {

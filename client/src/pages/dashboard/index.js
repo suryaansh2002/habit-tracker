@@ -15,6 +15,8 @@ import {
   FETCH_MIN_START_DATE_URL,
 } from "@/constants";
 import CustomSpinner from "@/components/CustomSpinner";
+import { DateRangePicker } from "@nextui-org/react";
+import { parseDate, getLocalTimeZone, today, CalendarDate } from "@internationalized/date";
 
 const StyleWrapperDatePicker = styled.div`
   .ant-picker-panel {
@@ -52,28 +54,30 @@ const StyleWrapperDatePicker = styled.div`
 `;
 
 function Dashboard({ user }) {
-  const [dateRange, setDateRange] = useState([
-    dayjs().subtract(7, "day"),
-    dayjs(),
-  ]);
+  const [dateRange, setDateRange] = useState({
+    start: parseDate(dayjs().subtract(7, "days").format("YYYY-MM-DD")),
+    end: parseDate(dayjs().format("YYYY-MM-DD")),
+  });
   const [habitsData, setHabitsData] = useState([]);
   const [minStartDate, setMinStartDate] = useState("");
   const [loading, setLoading] = useState(false);
   const getMinStartDate = async () => {
     const response = await axios.get(
-      FETCH_MIN_START_DATE_URL + `userId=${user.uid}`,
+      FETCH_MIN_START_DATE_URL + `userId=${user.uid}`
     );
-    setMinStartDate(response.data.startDate);
+    let dateString = response.data.startDate
+    const arr = dateString.split('-').map((item)=>Number(item))
+    setMinStartDate(arr);
   };
 
   const getUpdatedHabits = async () => {
     setLoading(true);
-    const startDate = dateRange[0].format("YYYY-MM-DD");
-    const endDate = dateRange[1].format("YYYY-MM-DD");
+    const startDate = dayjs(dateRange.start).format("YYYY-MM-DD");
+    const endDate = dayjs(dateRange.end).format("YYYY-MM-DD");
     localStorage.setItem("date-range", JSON.stringify([startDate, endDate]));
     const response = await axios.get(
       FETCH_FILTERED_HABITS_URL +
-        `startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`,
+        `startDate=${startDate}&endDate=${endDate}&userId=${user.uid}`
     );
     setHabitsData(response.data);
     setLoading(false);
@@ -83,7 +87,10 @@ function Dashboard({ user }) {
     let dateRangeLocal = localStorage.getItem("date-range");
     if (dateRangeLocal) {
       dateRangeLocal = JSON.parse(dateRangeLocal);
-      let tempArr = [dayjs(dateRangeLocal[0]), dayjs(dateRangeLocal[1])];
+      let tempArr = {
+        start: parseDate(dayjs(dateRangeLocal[0]).format("YYYY-MM-DD")),
+        end: parseDate(dayjs(dateRangeLocal[1]).format("YYYY-MM-DD")),
+      };
       setDateRange(tempArr);
     }
     getMinStartDate();
@@ -94,7 +101,6 @@ function Dashboard({ user }) {
   const panelRender = (panelNode) => (
     <StyleWrapperDatePicker>{panelNode}</StyleWrapperDatePicker>
   );
-
   return (
     <div className="maxContainer">
       {/* <LogoutButton /> */}
@@ -103,13 +109,34 @@ function Dashboard({ user }) {
       ) : (
         <div>
           <div className="text-center pt-16">
-            <DatePicker.RangePicker
+            {/* <DatePicker.RangePicker
               // panelRender={panelRender}
               defaultValue={dateRange}
               onChange={(e) => setDateRange(e)}
               allowClear={false}
               maxDate={dayjs()}
               minDate={dayjs(minStartDate)}
+            /> */}
+
+            <DateRangePicker
+              label="Select duration"
+              className="max-w-xs text-left ml-[50%] -translate-x-[50%]"
+              variant={"faded"}
+              maxValue={today(getLocalTimeZone())}
+              defaultValue={dateRange}
+              value={dateRange}
+              onChange={setDateRange}
+              visibleMonths={1}
+              pageBehavior="single"
+              minValue={new CalendarDate(minStartDate[0], minStartDate[1], minStartDate[2])}
+              // disabledDates={(date) => {
+              //   return [
+              //     [parseDate("0001-01-01"), parseDate(minStartDate).add({ days: -1 })], // Disables all days before the specific date
+              //   ].some(
+              //     ([start, end]) =>
+              //       date.compare(start) >= 0 && date.compare(end) <= 0
+              //   );
+              // }}
             />
           </div>
           {habitsData.length ? (

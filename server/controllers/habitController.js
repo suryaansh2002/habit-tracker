@@ -140,6 +140,12 @@ exports.getFilteredHabits = async (req, res) => {
     return {
       ...habit,
       totalDays: calculateDaysDifference(startDate, endDate) + 1,
+      countOfDaysDone: countDoneDaysInRange(
+        startDate,
+        endDate,
+        habit.daysDone
+      ),
+
     };
   });
 
@@ -154,6 +160,11 @@ exports.getFilteredHabits = async (req, res) => {
     return {
       ...habit,
       totalDays: calculateDaysDifference(startDate, habit.endDate) + 1,
+      countOfDaysDone: countDoneDaysInRange(
+        startDate,
+        habit.endDate,
+        habit.daysDone
+      ),
     };
   });
 
@@ -168,6 +179,11 @@ exports.getFilteredHabits = async (req, res) => {
     return {
       ...habit,
       totalDays: calculateDaysDifference(habit.startDate, endDate) + 1,
+      countOfDaysDone: countDoneDaysInRange(
+        habit.startDate,
+        endDate,
+        habit.daysDone
+      ),
     };
   });
 
@@ -183,6 +199,12 @@ exports.getFilteredHabits = async (req, res) => {
     return {
       ...habit,
       totalDays: calculateDaysDifference(habit.startDate, habit.endDate) + 1,
+      countOfDaysDone: countDoneDaysInRange(
+        habit.startDate,
+        habit.endDate,
+        habit.daysDone
+      ),
+
     };
   });
 
@@ -205,12 +227,7 @@ exports.getFilteredHabits = async (req, res) => {
   totalFilteredHabits = totalFilteredHabits.map((habit) => {
     return {
       ...habit,
-      totalDaysToDo: Math.ceil((habit.numDays / 7) * habit.totalDays),
-      countOfDaysDone: countDoneDaysInRange(
-        habit.startDate,
-        habit.endDate,
-        habit.daysDone
-      ),
+      totalDaysToDo: Math.ceil((habit.numDays / 7) * habit.totalDays)
     };
   });
   try {

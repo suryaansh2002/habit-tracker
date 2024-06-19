@@ -1,5 +1,5 @@
-// const BASE_URL = "http://localhost:5000/";
-const BASE_URL = "https://habit-tracker-server.vercel.app/";
+const BASE_URL = "http://localhost:5000/";
+// const BASE_URL = "https://habit-tracker-server.vercel.app/";
 
 const SIGNUP_URL = BASE_URL + "api/user";
 const ADD_HABIT_URL = BASE_URL + "api/habit";

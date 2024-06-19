@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { analytics, logEvent } from "../firebaseConfig";
+import { NextUIProvider } from "@nextui-org/react";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -20,10 +21,12 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Head>
-        <title>Habit Tracker</title>
-      </Head>
-      <Component {...pageProps} />
+      <NextUIProvider>
+        <Head>
+          <title>Habit Tracker</title>
+        </Head>
+        <Component {...pageProps} />
+      </NextUIProvider>
     </>
   );
 }

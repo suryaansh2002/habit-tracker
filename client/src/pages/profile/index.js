@@ -52,9 +52,13 @@ const Profile = ({ user }) => {
                     ? moment(habit.endDate).format("DD MMM YY")
                     : "No End Date"}
                 </div>
+                <div className="text-xs mt-2">
+                  {habit.numDays} days per week
+                  </div>
               </div>
+
               <div>
-                <a href={`/edit/${habit._id}`}>Edit</a>
+                <a className="text-sm mb-3" href={`/edit/${habit._id}`}>Edit</a> <br/>
               </div>
             </div>
           ))}

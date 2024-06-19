@@ -119,6 +119,7 @@ const AddHabit = ({ user }) => {
                   className="p-2 w-[100%] my-2 mb-6"
                   minDate={dayjs()}
                   allowClear={false}
+                  disabled={dayjs(startDate).isBefore(dayjs())}
                 />
               </div>
               <div>

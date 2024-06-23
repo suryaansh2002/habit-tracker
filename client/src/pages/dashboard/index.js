@@ -17,6 +17,7 @@ import {
 import CustomSpinner from "@/components/CustomSpinner";
 import { DateRangePicker } from "@nextui-org/react";
 import { parseDate, getLocalTimeZone, today, CalendarDate } from "@internationalized/date";
+import { I18nProvider } from "@react-aria/i18n";
 
 const StyleWrapperDatePicker = styled.div`
   .ant-picker-panel {
@@ -101,48 +102,66 @@ function Dashboard({ user }) {
   const panelRender = (panelNode) => (
     <StyleWrapperDatePicker>{panelNode}</StyleWrapperDatePicker>
   );
+  const computePercent = (habit)=>{
+   return (habit.countOfDaysDone * 100) / habit.totalDaysToDo 
+  }
+  const getColor = (habit) =>{
+    const percent = computePercent(habit)
+    const green = "#4bf542"
+    const yellow = "#f5dd40"
+    const red = "#e32945"
+    if(percent<=30){
+      return red
+    }
+    else if(percent>30 && percent<60){
+      return yellow
+    }
+    else{
+      return green
+    }
+  }
+  const calcualteNumDays = (dateRange)=>{
+    const startDate = moment(new Date(dateRange.start))
+    const endDate = moment(new Date(dateRange.end))
+    return endDate.diff(startDate, 'days') + 1
+  }
   return (
     <div className="maxContainer">
       {/* <LogoutButton /> */}
       {loading ? (
         <CustomSpinner />
       ) : (
-        <div>
-          <div className="text-center pt-16">
-            {/* <DatePicker.RangePicker
-              // panelRender={panelRender}
-              defaultValue={dateRange}
-              onChange={(e) => setDateRange(e)}
-              allowClear={false}
-              maxDate={dayjs()}
-              minDate={dayjs(minStartDate)}
-            /> */}
-
+        <div className="mt-6 ml-6">
+          <div className="text-2xl font-bold">
+          Summary
+          </div>
+          {habitsData.length ? (
+            <>
+          <div className="text-left pt-16">
+          <I18nProvider locale="en-GB">
             <DateRangePicker
               label="Select duration"
-              className="max-w-xs text-left ml-[50%] -translate-x-[50%]"
+              className="w-max text-left"
               variant={"faded"}
               maxValue={today(getLocalTimeZone())}
               defaultValue={dateRange}
               value={dateRange}
               onChange={setDateRange}
               visibleMonths={1}
+              dateFormat = {'MMM DD'}
               pageBehavior="single"
               minValue={new CalendarDate(minStartDate[0], minStartDate[1], minStartDate[2])}
-              // disabledDates={(date) => {
-              //   return [
-              //     [parseDate("0001-01-01"), parseDate(minStartDate).add({ days: -1 })], // Disables all days before the specific date
-              //   ].some(
-              //     ([start, end]) =>
-              //       date.compare(start) >= 0 && date.compare(end) <= 0
-              //   );
-              // }}
             />
+            
+            </I18nProvider>
+            <div className="mt-2 text-lg">
+              ({calcualteNumDays(dateRange)} days)
+            </div>
+
           </div>
-          {habitsData.length ? (
-            <div className="mt-8 mx-6 h-max pb-12 !overflow-y-auto ">
+            <div className="mt-8 -ml-2 w-[100%] h-max pb-12 !overflow-y-auto ">
               {habitsData.map((habit) => (
-                <div className="mb-8 bg-yellow-100 rounded-lg p-4">
+                <div className="mb-4 bg-gray-100 rounded-lg p-4">
                   <div className="flex justify-between">
                     <div className="font-semibold text-xl">{habit.name}</div>
                     <div>
@@ -152,25 +171,24 @@ function Dashboard({ user }) {
                   <div>
                     <Progress
                       percent={
-                        (habit.countOfDaysDone * 100) / habit.totalDaysToDo
+                        computePercent(habit)
                       }
                       format={(percent) => parseInt(percent).toString() + "%"}
+                      strokeColor={getColor(habit)}
                     />
                   </div>
                 </div>
               ))}
             </div>
+            </>
           ) : (
-            <div className="pt-12 text-lf text-center">
-              No data yet! Begin Tracking your habits here:{" "}
-              <a href="/track" className="font-bold">
-                Track
-              </a>{" "}
-              and add new habits to track here:{" "}
-              <a href="/profile" className="font-bold">
-                Profile
-              </a>
+            <div className="pt-12 text-left text-xl text-gray-600 w-[90%]">
+              Click on the 'Track' Tab in the bottom bar to start tracking...
+              <br/>
+              <br/>
+              And you will see your tracked habits here.
             </div>
+
           )}
         </div>
       )}

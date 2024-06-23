@@ -22,7 +22,7 @@ const LogoutButton = () => {
   return (
     <div
       type=""
-      className="text-sm text-right w-[90%] underline -mt-6"
+      className="text-xl text-left w-[90%]"
       onClick={handleLogout}
     >
       Logout

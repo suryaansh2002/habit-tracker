@@ -2,6 +2,7 @@ const Habit = require("../models/habit");
 const moment = require("moment");
 exports.createHabit = async (req, res) => {
   try {
+    req.body['masterHabitId']=req.body['habitId']
     const habit = new Habit(req.body);
     await habit.save();
     res.status(201).json(habit);
@@ -114,7 +115,6 @@ function countDoneDaysInRange(startDate, endDate, doneDays) {
 }
 
 exports.getFilteredHabits = async (req, res) => {
-  console.log(req.query);
   const { startDate, endDate, userId } = req.query;
   let habits = await Habit.find({ userId });
   habits= habits.map((habit)=>

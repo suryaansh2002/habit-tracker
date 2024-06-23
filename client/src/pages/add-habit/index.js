@@ -16,27 +16,25 @@ import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import BottomNav from "@/components/BottomNav";
 import { ADD_HABIT_URL } from "@/constants";
+import AddHabitForm from "@/components/AddHabitForm";
 
 const AddHabit = ({ user }) => {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
   const [endDate, setEndDate] = useState("");
-  const [numDays, setNumDays] = useState("Select...");
+  const [numDays, setNumDays] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [habitId, setHabitId] = useState("");
   useEffect(() => {
     if (localStorage.getItem("setHabit")) {
       setName(localStorage.getItem("setHabit"));
       localStorage.removeItem("setHabit");
     }
+    if (localStorage.getItem("habitId")) {
+      setHabitId(localStorage.getItem("habitId"));
+      localStorage.removeItem("habitId");
+    }
   }, []);
-  const days = ["Select...", 1, 2, 3, 4, 5, 6, 7];
-  const items = days.map((item) => {
-    return {
-      label: <div onClick={() => setNumDays(item)}>{item}</div>,
-      key: `${item}`,
-    };
-  });
 
   const handleAddHabit = async () => {
     // setLoading(true);
@@ -48,7 +46,7 @@ const AddHabit = ({ user }) => {
       message.error("Enter Start Date");
       return;
     }
-    if (numDays === "Select...") {
+    if (!numDays) {
       message.error("Select number of days!");
       return;
     }
@@ -59,6 +57,7 @@ const AddHabit = ({ user }) => {
       startDate,
       endDate: endDate == "Invalid Date" ? "" : endDate,
       numDays,
+      habitId,
     };
 
     try {
@@ -67,7 +66,11 @@ const AddHabit = ({ user }) => {
       setName("");
       message.success("Habit added successfully!");
       setTimeout(() => {
-        window.location.href = "./profile";
+        if (window.location.href.includes("new=true")) {
+          window.location.href = "./welcome";
+        } else {
+          window.location.href = "./profile";
+        }
       }, 1000);
     } catch (error) {
       console.error("Error adding habit:", error);
@@ -79,69 +82,30 @@ const AddHabit = ({ user }) => {
 
   return (
     <div className="maxContainer">
-      {/* <LogoutButton /> */}
-      <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%]">
-        <div className="text-2xl font-bold  border-b-2 border-gray mb-4">
-          Create a new Habit
-        </div>
-        <Form className="text-center w-[70%]">
-          <Form.Item>
-            <div className="text-left">Title:</div>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter Habit Title"
-              required
-              className="p-2 w-[100%] my-2"
-            />
-          </Form.Item>
-          <div>
-            <div className="text-left">Start Date:</div>
-            <DatePicker
-              format={"DD-MM-YYYY"}
-              onChange={(val) => {
-                setStartDate(dayjs(val.$d).format("YYYY-MM-DD"));
-              }}
-              defaultValue={dayjs()}
-              className="p-2 w-[100%] my-2 mb-6"
-              minDate={dayjs()}
-              allowClear={false}
-            />
-          </div>
-          <div>
-            <div className="text-left">End Date:</div>
-            <DatePicker
-              format={"DD-MM-YYYY"}
-              onChange={(val) => {
-                setEndDate(dayjs(val.$d).format("YYYY-MM-DD"));
-              }}
-              className="p-2 w-[100%] my-2 mb-6"
-              minDate={dayjs(startDate)}
-              allowClear={false}
-            />
-          </div>
-          <div>
-            <div className="text-left">No. of Days Weekly:</div>
-            <Dropdown menu={{ items }} className="w-[100%] mb-4 ">
-              <Button className="text-left">
-                <Space className="absolute left-4 w-[90%] flex justify-between">
-                  {numDays}
-                  <DownOutlined />
-                </Space>
-              </Button>
-            </Dropdown>
-          </div>
-          <Form.Item>
-            <Button
-              onClick={() => handleAddHabit()}
-              className="w-[100%] bg-gray-700 text-white  p-4 text-lg py-6"
-              loading={loading}
-            >
-              Add Habit
-            </Button>
-          </Form.Item>
-        </Form>
+        <div className="flex flex-col text-left ml-4 mt-4 h-[100vh] w-[100%]">
+      <div className="text-xl font-bold !text-left mt-4 mb-4">
+        Hello {user.displayName.split(" ")[0]},
       </div>
+      <div className="text-xl font-semibold text-left mr-16 text-gray-900 border-gray mb-8">
+        Let's get you started with building habits that matter.
+        <br />
+        <br />
+        Pick from popular habits OR Create a new habit
+      </div>
+     <AddHabitForm
+     user={user}
+     name={name}
+     setName={setName}
+     startDate={startDate}
+     setStartDate={setStartDate}
+     endDate={endDate}
+     setEndDate={setEndDate}
+     numDays={numDays}
+     setNumDays={setNumDays}
+     handleAddHabit={handleAddHabit}
+     loading={loading}
+     />
+     </div>
       <BottomNav />
     </div>
   );

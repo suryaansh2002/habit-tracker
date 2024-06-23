@@ -8,6 +8,7 @@ router.post('/', masterHabitController.createMasterHabit);
 
 // Get all unique categories
 router.get('/categories', masterHabitController.getAllUniqueCategories);
+router.get('/', masterHabitController.getAllHabits);
 
 // Get all habits for one category
 router.post('/categoryHabits', masterHabitController.getHabitsByCategory);

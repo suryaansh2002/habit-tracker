@@ -2,12 +2,12 @@ import React from "react";
 
 export default function BottomNav({ highlight }) {
   return (
-    <div className="fixed bottom-0  w-[100%] flex justify-around bg-[#000000] h-[4rem] text-white">
+    <div className="fixed bottom-0  w-[100%] flex bg-white justify-around border-t-4  h-[4rem] text-black">
       <a href="/dashboard">
         <div
           className={`text-sm w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
           style={
-            highlight == "home" ? { color: "black", background: "white" } : {}
+            highlight == "home" ? { fontWeight:'bold', fontSize:'1.05rem' } : {}
           }
         >
           Home
@@ -17,7 +17,7 @@ export default function BottomNav({ highlight }) {
         <div
           className={`text-sm w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
           style={
-            highlight == "track" ? { color: "black", background: "white" } : {}
+            highlight == "track" ? { fontWeight:'bold', fontSize:'1.05rem' } : {}
           }
         >
           Track
@@ -28,7 +28,7 @@ export default function BottomNav({ highlight }) {
           className={`text-sm w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
           style={
             highlight == "profile"
-              ? { color: "black", background: "white" }
+              ? { fontWeight:'bold', fontSize:'1.05rem' }
               : {}
           }
         >

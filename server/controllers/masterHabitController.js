@@ -34,6 +34,16 @@ exports.getHabitsByCategory = async (req, res) => {
   }
 };
 
+exports.getAllHabits = async (req, res) => {
+  try {
+    const habits = await MasterHabit.find();
+    res.status(200).json(habits);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+
 // Update an existing entry
 exports.updateMasterHabit = async (req, res) => {
   try {

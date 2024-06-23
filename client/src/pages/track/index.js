@@ -127,8 +127,10 @@ const Home = ({ user }) => {
         <CustomSpinner />
       ) : (
         <Card className="w-[100%] text-left">
-          <div className="text-center text-lg  mt-16 -mb-4">
-            Make Entries for &nbsp;{" "}
+           <div className="text-2xl font-bold text-gray-600">
+          Track
+          </div>
+          <div className="text-left text-lg  mt-8 -mb-4">
             <DatePicker
               value={dayjs(date)}
               onChange={(val) => {
@@ -136,20 +138,23 @@ const Home = ({ user }) => {
                   ? setDate(dayjs(val.$d).format("YYYY-MM-DD"))
                   : setDate(dayjs().format("YYYY-MM-DD"));
               }}
+              className="w-max text-xl"
               maxDate={dayjs()}
               allowClear={false}
               minDate={dayjs(minStartDate)}
+              format={'DD MMM'}
             />
           </div>
           {openHabits.length ? (
             <div className="flex flex-col text-center mt-12 justify-center align-middle w-[100%]">
               {openHabits.map((habit) => (
-                <Card className="w-[90%] ml-[5%] my-2 text-md text-left font-semibold">
+                <Card className="w-[100%] my-1 bg-gray-50 text-lg text-left">
                   <div className="flex flex-row justify-between">
                     <div className="">{habit.name}</div>
                     <div className="">
                       <Switch
                         checked={activeHabits.includes(habit._id)}
+                        className="w-[3rem] text-green-400"
                         onChange={(checked) => handleChange(checked, habit._id)}
                       />
                     </div>

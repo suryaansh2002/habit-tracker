@@ -41,15 +41,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex text-center justify-center items-center h-[100vh] w-[100vw]">
-      <Button
+    <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%] maxContainer">
+      <div className="text-xl mb-6">
+        Build Habits Towards <br/>
+        A Better Life
+      </div>
+      <button
         type=""
-        className="py-6 px-8 text-lg "
+        className="py-2 px-8 text-lg bg-[#FFE11D] w-[100%] mx-2"
         onClick={signInWithGoogle}
         disabled={loading}
       >
-        {loading ? <Spin size="large" /> : "Sign in with Google"}
-      </Button>
+        {loading ? <Spin size="large" /> : "SIGN IN WITH GMAIL"}
+      </button>
     </div>
   );
 }

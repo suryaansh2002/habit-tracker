@@ -10,6 +10,7 @@ const FETCH_SIGNLE_HABIT_URL = BASE_URL + "api/habit/single/";
 const UPDATE_USER_HABIT_URL = BASE_URL + "api/habit/";
 const FETCH_MASTER_CATEGORIES_URL = BASE_URL + "api/masterHabit/categories/";
 const FETCH_CATEGORY_HABITS_URL = BASE_URL + "api/masterHabit/categoryHabits/";
+const FETCH_ALL_MASTER_HABITS_URL = BASE_URL + "api/masterHabit/";
 
 module.exports = {
   SIGNUP_URL,
@@ -20,5 +21,6 @@ module.exports = {
   FETCH_SIGNLE_HABIT_URL,
   UPDATE_USER_HABIT_URL,
   FETCH_MASTER_CATEGORIES_URL,
-  FETCH_CATEGORY_HABITS_URL
+  FETCH_CATEGORY_HABITS_URL,
+  FETCH_ALL_MASTER_HABITS_URL
 };

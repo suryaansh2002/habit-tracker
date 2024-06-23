@@ -23,9 +23,6 @@ body{
 }
 }
 
-/* It's possible to change the styles coming from the library. Use the exact names as you see them when reviewing in Chrome Dev Tools (the classes from library start with "ant"). In order to do so in your .less file add media queries covering the screens with maximum width of 480px. It's enough to change the following 2 classes: */
-
-/* @media (max-width: 480px) { */
     .ant-calendar-range {
         width: 320px;
     }
@@ -55,7 +52,6 @@ body{
       flex-wrap: wrap !important; 
     }
     
-/* } */
 html {
   overflow-x: hidden !important;
 }
@@ -89,7 +85,7 @@ html {
     gap: 0;
     margin: auto;
   }
-} */
+} 
 
 .no-scroll {
   overflow: hidden;

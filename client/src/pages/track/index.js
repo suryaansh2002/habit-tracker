@@ -126,7 +126,7 @@ const Home = ({ user }) => {
       {loading ? (
         <CustomSpinner />
       ) : (
-        <Card className="w-[100%] text-left">
+        <Card className="w-[100%] pb-20 text-left">
            <div className="text-2xl font-bold text-gray-600">
           Track
           </div>

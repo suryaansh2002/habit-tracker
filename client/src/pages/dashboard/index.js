@@ -159,7 +159,7 @@ function Dashboard({ user }) {
             </div>
 
           </div>
-            <div className="mt-8 -ml-2 w-[100%] h-max pb-12 !overflow-y-auto ">
+            <div className="mt-8 -ml-2 w-[100%] h-max pb-20 !overflow-y-auto ">
               {habitsData.map((habit) => (
                 <div className="mb-4 bg-gray-100 rounded-lg p-4">
                   <div className="flex justify-between">

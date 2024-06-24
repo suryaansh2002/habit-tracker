@@ -5,7 +5,8 @@ import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { Button, Spin } from "antd";
 import { SIGNUP_URL } from "@/constants";
-
+import logo from '@/images/logo.png'
+import Image from "next/image";
 export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%] maxContainer">
+      <div>
+        <Image
+        src={logo}
+        className="w-[8rem] mb-4"
+        />
+      </div>
       <div className="text-xl mb-6">
         Build Habits Towards <br/>
         A Better Life

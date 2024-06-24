@@ -6,10 +6,10 @@ export default function BottomNav({ highlight }) {
     <div className="fixed bottom-0  w-[100%] flex bg-white justify-around border-t-4  h-[4rem] text-black">
       <a href="/dashboard">
         <div
-          className={`text-sm w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
+          className={`text-xs w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
           style={
             highlight == "home"
-              ? { fontWeight: "bold", fontSize: "1.05rem" }
+              ? { fontWeight: "bold", fontSize: "1rem" }
               : {}
           }
         >
@@ -17,8 +17,8 @@ export default function BottomNav({ highlight }) {
             <Image
               src={highlight == "home" ? "/home.svg" : "/home_light.svg"}
               alt="Description of the image"
-              width={40}
-              height={40}
+              width={27}
+              height={27}
               className="ml-[50%] -translate-x-[50%] -translate-y-4 -mb-4"
             />
           </div>
@@ -27,10 +27,10 @@ export default function BottomNav({ highlight }) {
       </a>
       <a href="/track">
         <div
-          className={`text-sm w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
+          className={`text-xs w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
           style={
             highlight == "track"
-              ? { fontWeight: "bold", fontSize: "1.05rem" }
+              ? { fontWeight: "bold", fontSize: "1rem" }
               : {}
           }
         >
@@ -38,8 +38,8 @@ export default function BottomNav({ highlight }) {
           <Image
               src={highlight == "track" ? "/track.svg" : "/track_light.svg"}
               alt="Description of the image"
-              width={40}
-              height={40}
+              width={27}
+              height={27}
               className="ml-[50%] -translate-x-[50%] -translate-y-4 -mb-4"
             />
 
@@ -49,10 +49,10 @@ export default function BottomNav({ highlight }) {
       </a>
       <a href="/profile">
         <div
-          className={`text-sm w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
+          className={`text-xs w-[33vw] md:w-[166px] text-center p-2 py-4 my-2 rounded-lg`}
           style={
             highlight == "profile"
-              ? { fontWeight: "bold", fontSize: "1.05rem" }
+              ? { fontWeight: "bold", fontSize: "1rem" }
               : {}
           }
         >
@@ -60,8 +60,8 @@ export default function BottomNav({ highlight }) {
           <Image
               src={highlight == "profile" ? "/habits.svg" : "/habits_light.svg"}
               alt="Description of the image"
-              width={40}
-              height={40}
+              width={27}
+              height={27}
               className="ml-[50%] -translate-x-[50%] -translate-y-4 -mb-4"
             />
 

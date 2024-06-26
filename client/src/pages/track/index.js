@@ -1,8 +1,8 @@
 import withAuth from "@/hoc/withAuth";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, DatePicker, Switch } from "antd";
-import moment from "moment";
+import { Card, Switch } from "antd";
+import moment, { min } from "moment";
 import dayjs from "dayjs";
 import BottomNav from "@/components/BottomNav";
 import LogoutButton from "@/components/LogoutButton";
@@ -13,10 +13,14 @@ import {
   UPDATE_USER_HABIT_URL,
 } from "@/constants";
 import CustomSpinner from "@/components/CustomSpinner";
+import {DatePicker} from "@nextui-org/react";
+import { parseDate, getLocalTimeZone, today, CalendarDate } from "@internationalized/date";
+import {useDateFormatter} from "@react-aria/i18n";
+import { I18nProvider } from "@react-aria/i18n";
 
 const Home = ({ user }) => {
   const [habits, setHabits] = useState([]);
-  const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
+  const [date, setDate] = React.useState(parseDate(dayjs().format("YYYY-MM-DD")));
   const [openHabits, setOpenHabits] = useState([]);
   const [activeHabits, setActiveHabits] = useState([]);
   const [minStartDate, setMinStartDate] = useState("");
@@ -25,18 +29,21 @@ const Home = ({ user }) => {
     const response = await axios.get(
       FETCH_MIN_START_DATE_URL + `userId=${user.uid}`,
     );
-    setMinStartDate(response.data.startDate);
+    let dateString = response.data.startDate
+    const arr = dateString.split('-').map((item)=>Number(item))
+    setMinStartDate(arr);
   };
   const fetchInitialHabits = async () => {
     setLoading(true);
+    let formattedDate  =  moment(new Date(date)).format('YYYY-MM-DD')
     try {
       const response = await axios.get(FETCH_USER_HABITS_URL + `${user.uid}`);
       setHabits(response.data);
       const openHabits = response.data.filter((habit) => {
         let isOpen = false;
-        if (moment(date).isSameOrAfter(moment(habit.startDate))) {
+        if (moment(new Date(date)).isSameOrAfter(moment(habit.startDate))) {
           if (habit.endDate) {
-            if (moment(date).isSameOrBefore(moment(habit.endDate))) {
+            if (moment(new Date(date)).isSameOrBefore(moment(habit.endDate))) {
               isOpen = true;
             }
           } else {
@@ -45,8 +52,9 @@ const Home = ({ user }) => {
         }
         return isOpen;
       });
+      console.log(openHabits)
       const tempActiveHabits = openHabits
-        .filter((item) => item.daysDone.includes(date))
+        .filter((item) => item.daysDone.includes(moment(new Date(date)).format('YYYY-MM-DD')))
         .map((item) => item._id);
       setActiveHabits(tempActiveHabits);
       setOpenHabits(openHabits);
@@ -62,9 +70,9 @@ const Home = ({ user }) => {
       setHabits(response.data);
       const openHabits = response.data.filter((habit) => {
         let isOpen = false;
-        if (moment(date).isSameOrAfter(moment(habit.startDate))) {
+        if (moment(new Date(date)).isSameOrAfter(moment(habit.startDate))) {
           if (habit.endDate) {
-            if (moment(date).isSameOrBefore(moment(habit.endDate))) {
+            if (moment(new Date(date)).isSameOrBefore(moment(habit.endDate))) {
               isOpen = true;
             }
           } else {
@@ -92,32 +100,19 @@ const Home = ({ user }) => {
     const selectedHabit = habits.find((item) => item._id == id);
     let tempDaysDone = selectedHabit.daysDone;
     let tempActiveHabits = [...activeHabits];
+    let formattedDate = moment(new Date(date)).format('YYYY-MM-DD')
     if (checked) {
       tempActiveHabits.push(id);
-      tempDaysDone.push(date);
+      tempDaysDone.push(formattedDate);
     } else {
       tempActiveHabits = tempActiveHabits.filter((item) => item != id);
-      tempDaysDone = tempDaysDone.filter((d) => d != date);
+      tempDaysDone = tempDaysDone.filter((d) => d != formattedDate);
     }
     setActiveHabits(tempActiveHabits);
     const response = await axios.put(UPDATE_USER_HABIT_URL + `${id}`, {
       daysDone: tempDaysDone,
     });
-    if (typeof window !== "undefined" && analytics) {
-      console.log("HERE");
-      console.log({
-        habit_name: selectedHabit.name,
-        done: checked,
-        habit_id: id,
-      });
-      const response = logEvent(analytics, "track_habit", {
-        habit_name: selectedHabit.name,
-        done: checked,
-        habit_id: id,
-      });
-      console.log(response);
-    }
-
+    console.log(response.data)
     fetchHabits();
   };
   return (
@@ -126,12 +121,22 @@ const Home = ({ user }) => {
       {loading ? (
         <CustomSpinner />
       ) : (
-        <Card className="w-[100%] pb-20 text-left">
+        <Card className="w-[100%] pb-20 text-left border-0">
            <div className="text-2xl font-bold text-gray-600">
           Track
           </div>
           <div className="text-left text-lg  mt-8 -mb-4">
+          <I18nProvider locale="en-GB">
             <DatePicker
+                          label={"Select Date"} 
+            className="w-max"
+            value={date} onChange={setDate}
+            maxValue={today(getLocalTimeZone())}
+            minValue={new CalendarDate(minStartDate[0], minStartDate[1], minStartDate[2])}
+
+            />
+            </I18nProvider>
+            {/* <DatePicker
               value={dayjs(date)}
               onChange={(val) => {
                 val
@@ -143,12 +148,12 @@ const Home = ({ user }) => {
               allowClear={false}
               minDate={dayjs(minStartDate)}
               format={'DD MMM'}
-            />
+            /> */}
           </div>
           {openHabits.length ? (
             <div className="flex flex-col text-center mt-12 justify-center align-middle w-[100%]">
               {openHabits.map((habit) => (
-                <Card className="w-[100%] my-1 bg-gray-50 text-lg text-left">
+                <Card className="w-[100%] my-1 bg-gray-100 text-lg text-left">
                   <div className="flex flex-row justify-between">
                     <div className="">{habit.name}</div>
                     <div className="">

@@ -51,8 +51,10 @@ function Welcome({ user }) {
       const response = await axios.get(FETCH_USER_HABITS_URL + `${user.uid}`);
       setUserHabits(response.data.map((item) => item.name));
       if (response.data.length > 0) {
+        if(!window.location.href.includes('new=true')){
         router.push("/dashboard");
       }
+    }
     } catch (error) {
       console.error("Error fetching habits:", error);
     }

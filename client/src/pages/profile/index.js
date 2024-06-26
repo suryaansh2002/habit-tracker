@@ -66,7 +66,7 @@ const addNewHabit=()=>{
         <CustomSpinner />
       ) : (
         <div className="flex flex-col text-left ml-6 h-max pt-8 w-[100%]">
-          <div className="text-2xl !text-left font-bold mt-8 mb-2 text-gray-600">
+          <div className="text-2xl !text-left font-bold mb-2 text-gray-600">
             {" "}
             Hello {user.displayName.split(" ")[0]},
           </div>
@@ -94,12 +94,12 @@ const addNewHabit=()=>{
               </div>
             </div>
           ))}
-          <Button
+          <button
             onClick={() => addNewHabit()}
-            className="w-[50%] bg-[#FFE11D] text-gray-800 font-bold  p-4 text-lg py-6 mt-2"
+            className="w-[50%] rounded-md bg-[#FFE11D] text-gray-800 font-bold text-lg p-2 mt-2"
           >
             Add More Habits
-          </Button>
+          </button>
           <div className="border-t-4 border-gray-100 my-4 mr-6">
             </div>
             <div className="font-bold text-xl">

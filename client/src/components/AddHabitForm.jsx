@@ -77,7 +77,7 @@ export default function AddHabitForm({
                 className={
                   numDays == day
                     ? `bg-black rounded-full text-white w-[2rem] h-[2rem] scale-125 duration-250`
-                    : `bg-gray-600  duration-250 rounded-full text-white w-[2rem] h-[2rem]`
+                    : `bg-gray-400   duration-250 rounded-full text-white w-[2rem] h-[2rem]`
                 }
                 onClick={() => {
                   numDays == day ? setNumDays(null) : setNumDays(day);

@@ -138,7 +138,7 @@ const handleModalClose = ()=>{
         title={<></>}
         loading={loading}
         open={open}
-        className="h-[90vh] overflow-y-auto  top-8 w-[95vw] rounded-md"
+        className="h-[100vh] overflow-y-auto  top-0 -translate-y-2 bottom-0 w-[95vw] rounded-md"
         footer={<></>}
         onCancel={() => setOpen(false)}
         afterClose={()=>handleModalClose()}
@@ -185,12 +185,12 @@ const handleModalClose = ()=>{
                   ))}
               </>
             ))}
-            <Button
+            <button
               onClick={() => setCurrentPage(1)}
-              className="w-[50%] mt-4 text-gray-800 font-semibold bg-[#FFE11D] p-4 text-lg py-6 ml-[50%] -translate-x-[50%]"
-            >
+              className="w-[50%] rounded-md bg-[#FFE11D] text-gray-800 font-bold text-lg p-2 mt-2"
+              >
               Create New Habit
-            </Button>
+            </button>
           </div>
         ) : currentPage == 1 ? (
           <div>

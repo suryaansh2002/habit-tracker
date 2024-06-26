@@ -4,8 +4,8 @@ import { auth, provider } from "../firebaseConfig";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import { Button, Spin } from "antd";
-import { SIGNUP_URL } from "@/constants";
-import logo from '@/images/logo.png'
+import { FETCH_USER_HABITS_URL, SIGNUP_URL } from "@/constants";
+import logo from "@/images/logo.png";
 import Image from "next/image";
 export default function Home() {
   const router = useRouter();
@@ -31,31 +31,36 @@ export default function Home() {
       });
   };
 
+  const handleRedirect = async (user) => {
+    const response = await axios.get(FETCH_USER_HABITS_URL + `${user.uid}`);
+    if (response.data.length > 0) {
+      router.push("/dashboard");
+    } else {
+      router.push("/welcome");
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     onAuthStateChanged(auth, (user) => {
       setLoading(false);
       if (user) {
-        router.push("/dashboard");
+        handleRedirect(user);
       }
     });
   }, []);
 
   return (
-    <div className="flex flex-col text-center justify-center items-center h-[100vh] w-[100%] maxContainer">
+    <div className="flex flex-col pt-[15vh] items-center h-[100vh] w-[100%] maxContainer">
       <div>
-        <Image
-        src={logo}
-        className="w-[8rem] mb-4"
-        />
+        <Image src={logo} className="w-[10rem] mb-4" />
       </div>
       <div className="text-xl mb-6">
-        Build Habits Towards <br/>
-        A Better Life
+        Build Habits Towards <br />A Better Life
       </div>
       <button
         type=""
-        className="py-2 px-8 text-lg bg-[#FFE11D] w-[100%] mx-2"
+        className="py-2 px-8 text-md bg-[#FFE11D] w-[70%] mx-2"
         onClick={signInWithGoogle}
         disabled={loading}
       >

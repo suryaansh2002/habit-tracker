@@ -67,7 +67,7 @@ const AddHabit = ({ user }) => {
       message.success("Habit added successfully!");
       setTimeout(() => {
         if (window.location.href.includes("new=true")) {
-          window.location.href = "./welcome";
+          window.location.href = "./welcome?new=true";
         } else {
           window.location.href = "./profile";
         }

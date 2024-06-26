@@ -46,7 +46,7 @@ export default function EditHabitForm({
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter Habit Title"
           required
-          className="p-2 w-[100%] my-2"
+          className="p-2 text-base w-[100%] my-2"
         />
       </Form.Item>
       <div>
@@ -56,7 +56,7 @@ export default function EditHabitForm({
             setStartDate(dayjs(val.$d).format("YYYY-MM-DD"));
           }}
           defaultValue={dayjs(startDate)}
-          className="p-2 w-[100%] my-2 mb-6"
+          className="p-2 w-[100%] my-2 mb-6 text-base"
           minDate={dayjs()}
           allowClear={false}
           disabled={dayjs(startDate).isBefore(dayjs())}
@@ -85,7 +85,7 @@ export default function EditHabitForm({
               className={
                 numDays == day
                   ? `bg-black rounded-full text-white w-[2rem] h-[2rem] scale-125 duration-250`
-                  : `bg-gray-600  duration-250 rounded-full text-white w-[2rem] h-[2rem]`
+                  : `bg-gray-400  duration-250 rounded-full text-white w-[2rem] h-[2rem]`
               }
               onClick={() => {
                 numDays == day ? setNumDays(null) : setNumDays(day);
@@ -105,13 +105,13 @@ export default function EditHabitForm({
     </Dropdown> */}
       </div>
       <Form.Item className="text-left my-8">
-        <Button
+        <button
           onClick={() => handleEditHabit()}
-          className="w-[50%] bg-[#FFE11D] text-gray-800  p-4 text-lg py-6"
+          className="w-[50%] rounded-md bg-[#FFE11D] text-gray-800 font-semibold text-lg p-2 mt-2"
           loading={loading}
         >
           Update
-        </Button>
+        </button>
       </Form.Item>
     </Form>
   );

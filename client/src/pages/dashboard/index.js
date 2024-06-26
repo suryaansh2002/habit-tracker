@@ -67,6 +67,12 @@ function Dashboard({ user }) {
       FETCH_MIN_START_DATE_URL + `userId=${user.uid}`
     );
     let dateString = response.data.startDate
+    if(dayjs().subtract(7, "days").isBefore(dayjs(dateString))){
+      setDateRange({
+        start: parseDate(dayjs(dateString).format("YYYY-MM-DD")),
+        end: parseDate(dayjs().format("YYYY-MM-DD")),
+      })
+    }
     const arr = dateString.split('-').map((item)=>Number(item))
     setMinStartDate(arr);
   };
@@ -137,12 +143,12 @@ function Dashboard({ user }) {
           </div>
           {habitsData.length ? (
             <>
-          <div className="text-left pt-16">
+          <div className="text-left pt-4">
           <I18nProvider locale="en-GB">
             <DateRangePicker
-              label="Select duration"
+              label={`Select duration (${calcualteNumDays(dateRange)} days)`}
               className="w-max text-left"
-              variant={"faded"}
+              variant={"bordered"}
               maxValue={today(getLocalTimeZone())}
               defaultValue={dateRange}
               value={dateRange}
@@ -154,17 +160,20 @@ function Dashboard({ user }) {
             />
             
             </I18nProvider>
-            <div className="mt-2 text-lg">
+            {/* <div className="mt-2 text-lg">
               ({calcualteNumDays(dateRange)} days)
-            </div>
+            </div> */}
 
           </div>
             <div className="mt-8 -ml-2 w-[100%] h-max pb-20 !overflow-y-auto ">
+              <div className="text-gray-500 mb-2 text-right">
+                target / goal Days
+              </div>
               {habitsData.map((habit) => (
                 <div className="mb-4 bg-gray-100 rounded-lg p-4">
                   <div className="flex justify-between">
-                    <div className="font-semibold text-xl">{habit.name}</div>
-                    <div>
+                    <div className="font-semibold text-lg">{habit.name}</div>
+                    <div className="text-sm">
                       {habit.countOfDaysDone} / {habit.totalDaysToDo} Days
                     </div>
                   </div>
